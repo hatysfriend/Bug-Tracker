@@ -2,11 +2,14 @@
 const express = require('express');
 const data = require('./data/database');
 const fs = require('fs');
+const chroma = require('chroma-log');
 
 let app = express();
 
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
+
+app.use(chroma);
 
 app.get('/index', (req, res) => {
     fs.readFile(filePath, (err, data) => {
