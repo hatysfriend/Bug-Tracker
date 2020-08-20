@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<head>
+
+</head>
+<body>
+    <div>
+        <h1> <%=title%> </h1>
+        <h3> <%=subTitle%> </h3>
+    </div>
+
+    <h2>Current Bugs</h2>
+    <div>
+        <%bugList.forEach(element=>{%>
+            <h1><%=element%></h1>
+         <%});%>
+    </div>
+</body>
