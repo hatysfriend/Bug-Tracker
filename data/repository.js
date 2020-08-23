@@ -1,8 +1,11 @@
-const repository = (function () {
+module.exports = function (connectionString) {
   const schema = require("./schemas");
   const database = require("./database");
 
-  let mongoose = database.GetDbInstance();
+  let mongoose;
+  let currentString = connectionString || "mongodb://localhost:30000/bugDB";
+  console.log(`Testing using: ${currentString}`);
+  mongoose = database.GetDbInstance(currentString);
 
   //Model
   const BugObject = mongoose.model("bugs", schema.bugSchema());
@@ -13,11 +16,15 @@ const repository = (function () {
 
   async function _insertSingleBug(bug) {
     let bugModel = new BugObject(bug);
-    await bugModel.save();
+    return await bugModel.save()
   }
 
   async function _getAllBugs() {
       return await BugObject.find()
+  }
+
+  async function _deleteCollection() {
+    return await BugObject.deleteMany();
   }
 
   return {
@@ -29,8 +36,9 @@ const repository = (function () {
     },
     GetAllBugs() {
         return _getAllBugs();
+    },
+    DeleteCollection() {
+      return _deleteCollection();
     }
   };
-})();
-
-module.exports = repository;
+};

@@ -1,6 +1,7 @@
-(function (seedData) {
-    let comments = require('./seedCommentData');
-    seedData.initialBugs = [
+let comments = require('./seedCommentData');
+
+module.exports = {
+    initialBugs: [
         {
             name: "Broken link",
             author: "Brock",
@@ -25,6 +26,15 @@
             description: "The Database connection is giving an error on startup",
             tags: ["Mongo", "Database", "Mongoose"],
             date: "03/07/2020"
+        },
+        {
+            name: "Date Bug",
+            author: "Ash Ketchum",
+            status: "In-Progress",
+            description: "When a date is added to a bug entry it is being saved wrong, sometimes a day gets added, sometimes a month, we are thinking that is has"+
+            " something to do with the mongo-db instance or the docker image/container",
+            tags: ["Mongo", "Database", "Mongoose", "Container"],
+            date: "03/07/2020"
         }
      ]
-})(module.exports);
+};
