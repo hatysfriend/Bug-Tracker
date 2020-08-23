@@ -11,9 +11,9 @@ app.set("view engine", "ejs");
 
 app.use(chroma);
 
-app.get("/index", async (req, res) => {
+app.get("/", async (req, res) => {
   let bugs = await repository.GetAllBugs();
-  console.warn(bugs[0].comments.length);
+  console.log(bugs);
   res.render("index", {
     title: "The Bug Tracker",
     subtitle: "Buggy Tracker",
@@ -21,7 +21,7 @@ app.get("/index", async (req, res) => {
   });
 });
 
-app.get("/save", (req, res) => {
+app.get("/save", async (req, res) => {
   bug = {
     name: "Testy New Bug",
     author: "Thomas",
@@ -29,18 +29,23 @@ app.get("/save", (req, res) => {
     description: "Will It Blend",
     tags: ["String"],
     date: "01/01/2020",
-    comments: null,
+    comments: [],
   };
-  repository.InsertSingleBug(bug);
+  await repository.InsertSingleBug(bug);
   res.send("Single Bug Saved!");
 });
 
-app.get("/seed", (req, res) => {
-  const bugs = seedData.initialBugs;
-  repository.InsertBugCollection(bugs);
+app.get("/seed", async (req, res) => {
+  await seed();
   res.send("Data Seeded!");
 });
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");
+});
+
+let seed = (async function() {
+  const bugs = seedData.initialBugs;
+  await repository.InsertBugCollection(bugs);
+  console.log("Data Seeded!");
 });
