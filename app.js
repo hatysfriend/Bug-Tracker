@@ -4,13 +4,18 @@ const express = require("express");
 const chroma = require("chroma-log");
 const seedData = require("./data/seedData");
 const repository = require("./data/repository")();
+const bodyParser = require('body-parser');
 
 let app = express();
 
 app.set("views", "./src/views");
 app.set("view engine", "ejs");
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+// app.use(bodyParser.json());
 
 app.use(chroma);
 
@@ -49,6 +54,29 @@ app.get("/save", async (req, res) => {
 app.get("/seed", async (req, res) => {
   await seed();
   res.send("Data Seeded!");
+});
+
+app.get("/addbug", async (req, res) => {
+  res.render('addbug');
+});
+
+app.post("/addbug", async (req, res) => {
+  console.log(req.body);
+  bug = {
+    name: req.body.name,
+    author: req.body.author,
+    status: req.body.status,
+    description: req.body.description,
+    tags: req.body.tags,
+    date: req.body.date,
+    comments: []
+  };
+  console.log(bug);
+  repository.InsertSingleBug(bug)
+    .then(()=>{res.redirect('/')})
+    .catch((err)=>{
+      res.render('error');
+    });
 });
 
 app.listen(3000, () => {

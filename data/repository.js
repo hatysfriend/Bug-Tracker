@@ -20,7 +20,7 @@ module.exports = function (connectionString) {
   }
 
   async function _getAllBugs() {
-      return await BugObject.find()
+    return await BugObject.find()
   }
 
   async function _deleteCollection() {
@@ -32,13 +32,17 @@ module.exports = function (connectionString) {
       return _insertBugCollection(bugs);
     },
     InsertSingleBug(bug) {
-        return _insertSingleBug(bug);
+      return _insertSingleBug(bug);
     },
     GetAllBugs() {
-        return _getAllBugs();
+      return _getAllBugs();
     },
     DeleteCollection() {
       return _deleteCollection();
     }
   };
 };
+
+
+
+
