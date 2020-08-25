@@ -1,5 +1,5 @@
-const repo = require("../data/repository")("mongodb://localhost:30000/testDB");
 const assert = require('assert');
+const repo = require("../data/repository")("mongodb://localhost:30000/testDB");
 const expect = require('chai').expect;
 const seedData = require('../data/seedData');
 
