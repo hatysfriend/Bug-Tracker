@@ -4,7 +4,7 @@
   "description": "Bug Tracker",
   "main": "app.js",
   "scripts": {
-    "test": "mocha test --exit",
+    "test": "docker run --name bugDB -p 30000:27017 -d mongo:latest && mocha test --exit || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && mocha test --exit",
     "start": "docker run --name bugDB -p 30000:27017 -d mongo:latest && nodemon app.js || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && nodemon app.js"
   },
   "keywords": [
