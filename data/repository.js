@@ -1,15 +1,12 @@
 module.exports = function (connectionString) {
-  const schema = require("./schemas");
+  const BugObject = require("./schemas");
   const database = require("./database");
 
   let mongoose;
   let currentString = connectionString || "mongodb://localhost:30000/bugDB";
   console.log(`Testing using: ${currentString}`);
   mongoose = database.GetDbInstance(currentString);
-
-  //Model
-  const BugObject = mongoose.model("bugs", schema.bugSchema());
-
+  
   async function _insertBugCollection(bugs) {
     await BugObject.insertMany(bugs);
   }

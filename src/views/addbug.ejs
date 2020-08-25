@@ -1,8 +1,11 @@
 <%- include('templates/header'); -%>
+
 <body>
+    <%- include('templates/scriptsection'); -%>
+
     <h1>Add a BUG</h1>
     <a class="btn btn-warning">Ugly</a>
-    <form method="POST" action="/addbug">
+    <form method="POST" action="/bugs/addbug">
         <label for="name">Name </label><br>
         <input type="text" name="name"><br>
 
@@ -28,3 +31,4 @@
 
         <input class="btn btn-success" type="submit" value="Submit Bug">
     </form>
+</body>

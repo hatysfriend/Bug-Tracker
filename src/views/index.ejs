@@ -1,44 +1,92 @@
-<!DOCTYPE html>
-<head>
-    <!-- CSS only -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-<!-- JS, Popper.js, and jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-</head>
+<%- include('templates/header'); -%>
 <body>
-    <div>
-        <h1><%=title%></h1>
-        <h3><%=subtitle%></h3>
+  <script>
+    let loadBugs = async () => {
+      let bugs = await fetch("/bugs/getBugsJson");
+      let json = await bugs.json();
+
+      let left = document.getElementById("left");
+      let mid = document.getElementById("mid");
+      let right = document.getElementById("right");
+
+      let template = function(bug, tags) {
+        let template = '<li class="list-group-item">' +
+                '<div class="card">' +
+                    '<div class="card-body">' +
+                      tags +
+                      '<br>' +
+                      '<h5 class="card-title mt-2">'+bug.name+'</h5>' +
+                      '<hr>' +
+                      '<p class="card-text">'+bug.description+'</p>'+
+                      '<a href="#" class="badge badge-info">Info</a>' +
+                      '<span class="far fa-comments ml-4">  '+bug.comments.length+'</span>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>'
+        return template;
+      }
+
+      let tags = function(bug) {
+          let tags = "";
+          let colours = ["primary", "secondary", "success", "danger", "warning", "info", "light"]
+          bug.tags.forEach(tag => {
+              tags += '<span class="mx-1 badge badge-pill badge-'+colours[Math.floor(Math.random() * colours.length)]+'">'+tag+'</span>'
+          });
+          return tags;
+      }
+
+      json.forEach(bug => {
+          console.log(bug);
+          if(bug.status === 'Created') {
+            left.innerHTML += template(bug, tags(bug));
+          }
+          if(bug.status === 'In-Progress') {
+            mid.innerHTML += template(bug, tags(bug));
+          }
+          if(bug.status === 'Fixed') {
+            right.innerHTML += template(bug ,tags(bug));
+          }
+      });
+    };
+
+    let dragger = () => {
+      dragula([
+        document.querySelector("#left"),
+        document.querySelector("#mid"),
+        document.querySelector("#right"),
+      ]);
+      console.log("Loaded");
+    };
+
+    let initialize = () => {
+      loadBugs();
+      dragger();
+    };
+    window.onload = initialize;
+  </script>
+
+  <div>
+    <h1><%=title%></h1>
+    <h3><%=subtitle%></h3>
+  </div>
+
+  <div id="main">
+    <div class="card-deck">
+      <div class="card">
+        <h5 class="card-title alert alert-danger">Found</h5>
+        <ul class="list-group list-group-flush container" id="left">
+        </ul>
+      </div>
+      <div class="card">
+        <h5 class="card-title alert alert-warning">In-Progress</h5>
+        <ul class="list-group list-group-flush container" id="mid">
+        </ul>
+      </div>
+      <div class="card">
+        <h5 class="card-title alert alert-success">Fixed</h5>
+        <ul class="list-group list-group-flush container" id="right">
+        </ul>
+      </div>
     </div>
-    <hr>
-    <h2 class="text=warning">Current Bugs</h2>
-    <div>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Bug</th>
-                    <th>Description</th>
-                    <th>Author</th>
-                    <th>Status</th>
-                    <th>Comments</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%{bugList.forEach(bug => {%>
-                    <tr>
-                        <td><%=bug.id%></td>
-                        <td><%=bug.name%></td>
-                        <td><%=bug.description%></td>
-                        <td><%=bug.author%></td>
-                        <td><%=bug.status%></td>
-                        <td><%=bug.comments.length%></td>
-                    </tr>                 
-                <%});}%>
-            </tbody>
-        </table>
-    </div>  
+  </div>
 </body>
