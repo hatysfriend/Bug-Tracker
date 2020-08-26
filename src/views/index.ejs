@@ -1,60 +1,74 @@
 <%- include('templates/header'); -%>
+
 <body>
   <script>
     let loadBugs = async () => {
       let bugs = await fetch("/bugs/getBugsJson");
       let json = await bugs.json();
 
-      let left = document.getElementById("left");
-      let mid = document.getElementById("mid");
-      let right = document.getElementById("right");
+      let created = document.getElementById("Created");
+      let inProgress = document.getElementById("In-Progress");
+      let fixed = document.getElementById("Fixed");
 
-      let template = function(bug, tags) {
-        let template = '<li class="list-group-item">' +
-                '<div class="card">' +
-                    '<div class="card-body">' +
-                      tags +
-                      '<br>' +
-                      '<h5 class="card-title mt-2">'+bug.name+'</h5>' +
-                      '<hr>' +
-                      '<p class="card-text">'+bug.description+'</p>'+
-                      '<a href="#" class="badge badge-info">Info</a>' +
-                      '<span class="far fa-comments ml-4">  '+bug.comments.length+'</span>' +
-                    '</div>' +
-                  '</div>' +
-                '</li>'
+      let template = function (bug, tags) {
+        let template = '<li class="list-group-item" bugid="'+bug._id+'"' +
+          '<div class="card">' +
+          '<div class="card-body">' +
+          tags +
+          '<br>' +
+          '<h5 class="card-title mt-2">' + bug.name + '</h5>' +
+          '<hr>' +
+          '<p class="card-text">' + bug.description + '</p>' +
+          '<a href="#" class="badge badge-info">Info</a>' +
+          '<span class="far fa-comments ml-4">  ' + bug.comments.length + '</span>' +
+          '</div>' +
+          '</div>' + 
+          '</li>'
         return template;
       }
 
-      let tags = function(bug) {
-          let tags = "";
-          let colours = ["primary", "secondary", "success", "danger", "warning", "info", "light"]
-          bug.tags.forEach(tag => {
-              tags += '<span class="mx-1 badge badge-pill badge-'+colours[Math.floor(Math.random() * colours.length)]+'">'+tag+'</span>'
-          });
-          return tags;
+      let tags = function (bug) {
+        let tags = "";
+        bug.tags.forEach(tag => {
+          tags += '<span class="mx-1 badge badge badge-' + tag.colour+ '">' + tag.name + '</span>'
+        });
+        return tags;
       }
 
       json.forEach(bug => {
-          console.log(bug);
-          if(bug.status === 'Created') {
-            left.innerHTML += template(bug, tags(bug));
-          }
-          if(bug.status === 'In-Progress') {
-            mid.innerHTML += template(bug, tags(bug));
-          }
-          if(bug.status === 'Fixed') {
-            right.innerHTML += template(bug ,tags(bug));
-          }
+        console.log(bug);
+        if (bug.status === 'Created') {
+          created.innerHTML += template(bug, tags(bug));
+        }
+        if (bug.status === 'In-Progress') {
+          inProgress.innerHTML += template(bug, tags(bug));
+        }
+        if (bug.status === 'Fixed') {
+          fixed.innerHTML += template(bug, tags(bug));
+        }
       });
     };
 
+    let bugStatusUpdater = async (bugID, status)=>{
+      console.log(status);
+      let result = await fetch('/bugs/updateStatus', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          bugID: bugID,
+          status: status
+        })
+      });
+    }
+
     let dragger = () => {
       dragula([
-        document.querySelector("#left"),
-        document.querySelector("#mid"),
-        document.querySelector("#right"),
-      ]);
+        document.querySelector("#Created"),
+        document.querySelector("#In-Progress"),
+        document.querySelector("#Fixed"),
+      ]).on('drop', function (el, target) {
+          bugStatusUpdater(el.getAttribute('bugid'), target.getAttribute('id'));
+      });
       console.log("Loaded");
     };
 
@@ -65,28 +79,115 @@
     window.onload = initialize;
   </script>
 
+  <script>
+    function handleNewBugClick() {
+      $('#addBugModal').modal('show');
+    }
+  </script>
+
   <div>
     <h1><%=title%></h1>
     <h3><%=subtitle%></h3>
   </div>
 
   <div id="main">
-    <div class="card-deck">
-      <div class="card">
-        <h5 class="card-title alert alert-danger">Found</h5>
-        <ul class="list-group list-group-flush container" id="left">
-        </ul>
+    <button onclick="handleNewBugClick()" class="btn btn-info"><span class="fa fa-plus"> Add New Bug</span></button>
+    <div class="row">
+      <h5 class="alert alert-danger col-4">Created</h5>
+      <h5 class="alert alert-warning col-4">In-Progress</h5>
+      <h5 class="alert alert-success col-4">Fixed</h5>
+    </div>
+    <div class="row">
+      <div class="container col-3" id="Created" >
       </div>
-      <div class="card">
-        <h5 class="card-title alert alert-warning">In-Progress</h5>
-        <ul class="list-group list-group-flush container" id="mid">
-        </ul>
+      <div class="container col-3" id="In-Progress">
       </div>
-      <div class="card">
-        <h5 class="card-title alert alert-success">Fixed</h5>
-        <ul class="list-group list-group-flush container" id="right">
-        </ul>
+      <div class="container col-3" id="Fixed">
       </div>
     </div>
   </div>
 </body>
+
+<div class="modal" tabindex="-1" role="dialog" id="addBugModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <body>
+          <%- include('templates/scriptsection'); -%>
+      
+          <h1>Add a BUG</h1>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Dropdown
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <form>
+                <div class="form-group">
+                  <input type="text" class="form-control">
+                  <select>
+                    <option value="">Select Colour...</option>
+                    <option value="success"><span class="text-success">Green</span></option>
+                    <option value="info"><span class="text-info">Teal</span></option>
+                    <option value="warning"><span class="text-warning">Orange</span></option>
+                    <option value="secondary"><span class="text-secondary">Grey</span></option>
+                    <option value="danger"><span class="text-danger">Red</span></option>
+                  </select>
+                </div>
+              </form>
+              <button class="dropdown-item" type="button">Action</button>
+              <button class="dropdown-item" type="button">Another action</button>
+              <button class="dropdown-item" type="button">Something else here</button>
+            </div>
+          </div>
+
+          <form method="POST" action="/bugs/addbug">
+              <div class="<div class="form-group">
+                <label for="name">Name </label><br>
+                <input type="text" name="name" class="form-control"><br>
+              </div>
+                
+              <div class="<div class="form-group">
+                <label for="author">Author </label><br>
+                <input type="text" name="author" class="form-control"><br>
+              </div>         
+              
+              <div class="form-group">
+                <label for="status">Status </label><br>
+                <select name="status" class="form-control">
+                    <option id="opt-default" value="">Choose Option...</option>
+                    <option class="text-danger" name="opt-found" value="Created">Created</option>
+                    <option class="text-warning" name="opt-in-progress" value="In-Progress">In-Progress</option>
+                    <option class="text-success" name="opt-fixed" value="Fixed">Fixed</option>
+                </select><br>
+              </div>
+              
+              <div class="form-group">
+                <label for="description">Description </label><br>
+                <input type="text" name="description" class="form-control"><br>
+              </div>
+
+              <div class="form-group">
+                <label for="tags">Tags </label><br>
+                <input type="text" name="tags" class="form-control"><br>
+              </div>
+              
+              <div class="form-group">
+                <label for="date">Date </label><br>
+                <input type="text" name="date" class="form-control"><br>
+              </div>   
+      </body>
+      </div>
+      <div class="modal-footer">
+        <input class="btn btn-success" type="submit" value="Submit Bug">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>

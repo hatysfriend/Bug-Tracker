@@ -50,6 +50,12 @@ module.exports = {
       .catch((err) => {
         res.render("error");
       });
+  },
+
+  update_bug_status: async (req, res) =>{
+    let bug = await repository.GetBugByID(req.body.bugID);
+    bug.status = req.body.status;
+    repository.UpdateBug(bug);
   }
 };
 

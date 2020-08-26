@@ -1,3 +1,5 @@
+const { DocumentProvider } = require("mongoose");
+
 module.exports = function (connectionString) {
   const BugObject = require("./schemas");
   const database = require("./database");
@@ -24,6 +26,14 @@ module.exports = function (connectionString) {
     return await BugObject.deleteMany();
   }
 
+  async function _getBugByID(id) {
+    return await BugObject.findById(id);
+  }
+
+  async function _updateBug(bug) {
+    return await _insertSingleBug(bug);
+  }
+
   return {
     InsertBugCollection(bugs) {
       return _insertBugCollection(bugs);
@@ -36,6 +46,12 @@ module.exports = function (connectionString) {
     },
     DeleteCollection() {
       return _deleteCollection();
+    },
+    GetBugByID(id) {
+      return _getBugByID(id)
+    },
+    UpdateBug(bug) {
+      return _updateBug(bug);
     }
   };
 };
