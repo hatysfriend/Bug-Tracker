@@ -1,5 +1,5 @@
 const assert = require('assert');
-const repo = require("../data/repository")("mongodb://localhost:30000/testDB");
+const repo = require("../data/bugRepository")("mongodb://localhost:30000/testDB");
 const expect = require('chai').expect;
 const seedData = require('../data/seedData');
 
@@ -34,7 +34,7 @@ describe("InsertSingleBug() - Repo Tests: ", () => {
       author: "Thomas",
       status: "Fixed",
       description: "Will It Blend",
-      tags: ["String"],
+      tags: [{name: "cool", colour: "info"}],
       date: new Date(2020,07,01),
       comments: [],
     };

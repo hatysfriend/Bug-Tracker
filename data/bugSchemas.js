@@ -24,3 +24,4 @@ let bugSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("bugs", bugSchema);
+

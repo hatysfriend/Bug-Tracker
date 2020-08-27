@@ -1,7 +1,5 @@
-const { DocumentProvider } = require("mongoose");
-
 module.exports = function (connectionString) {
-  const BugObject = require("./schemas");
+  const BugObject = require("./bugSchemas");
   const database = require("./database");
 
   let mongoose;
