@@ -4,8 +4,8 @@
   "description": "Bug Tracker",
   "main": "app.js",
   "scripts": {
-    "test": "docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/testDB&& mocha test --exit || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/testDB&& mocha test --exit",
-    "start": "docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/bobDB&& nodemon server.js || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/bobDB&& nodemon server.js"
+    "test": "docker-compose up -d && set CONNECTION=mongodb://localhost:30000/testyDB&& mocha test --exit",
+    "start": "docker-compose up -d && set CONNECTION=mongodb://localhost:30000/buggyDB&& nodemon server.js"
   },
   "keywords": [
     "Bug"

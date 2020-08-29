@@ -9,7 +9,7 @@ module.exports = {
       author: "Thomas",
       status: "Failed",
       description: "Will It Blend",
-      tags: ["String"],
+      tags: [{name: "Nice", colour: "info"}],
       date: "01/01/2020",
       comments: [],
     };

@@ -2,15 +2,12 @@ const chai = require("chai");
 const should = chai.should();
 const chaiHttp = require("chai-http");
 const server = require("../app");
+const seedData = require('../data/seedUserData');
 
 chai.use(chaiHttp);
 
 beforeEach(async () => {
   await seedData.seed();
-});
-
-afterEach(() => {
-  repo.DeleteCollection();
 });
 
 describe("Logout Tests", () => {
