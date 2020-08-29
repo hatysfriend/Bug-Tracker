@@ -23,15 +23,15 @@ module.exports = {
     },
     login_a_user: (req, res, next) => {
         passport.authenticate('local', (err, userReturn, info) => {
-            // if(err) {
-            //     handleResponse(res, 500, 'error');
-            // }
+            console.log("USER For Login!" + userReturn);
+            if(err) {
+                handleResponse(res, 500, 'error');
+            }
             if(!userReturn) {
-                console.log("USER????" + userReturn);
                 handleResponse(res, 404, 'User not found');
             }
             if(userReturn) {
-                req.logIn(user, (err) => {
+                req.logIn(userReturn, (err) => {
                     if(err) {
                         handleResponse(res, 500, 'error');
                     }
@@ -46,4 +46,4 @@ module.exports = {
 
 function handleResponse(res, code, statusMsg) {
     res.status(code).json({status: statusMsg});
-  }
+}
