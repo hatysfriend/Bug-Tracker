@@ -1,11 +1,8 @@
-module.exports = function (connectionString) {
+module.exports = (() => {
   const BugObject = require("./bugSchemas");
   const database = require("./database");
 
-  let mongoose;
-  let currentString = connectionString || "mongodb://localhost:30000/bugDB";
-  console.log(`Testing using: ${currentString}`);
-  mongoose = database.GetDbInstance(currentString);
+  database.GetDbInstance();
   
   async function _insertBugCollection(bugs) {
     await BugObject.insertMany(bugs);
@@ -52,7 +49,7 @@ module.exports = function (connectionString) {
       return _updateBug(bug);
     }
   };
-};
+})();
 
 
 

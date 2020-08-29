@@ -1,4 +1,4 @@
-const repository = require("../data/bugRepository")();
+const repository = require("../data/bugRepository");
 const seedData = require("../data/seedData");
 
 module.exports = {

@@ -14,7 +14,15 @@ async function createEncryptedUser (username, password) {
     return user;
 }
 
+function loginRequired(req, res, next) {
+    if(!req.user) {
+        return res.status(401).json({status: 'Please Login Mate!'});
+    }
+    return next();
+}
+
 module.exports = {
+    loginRequired,
     comparePassword,
     createEncryptedUser
 };

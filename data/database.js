@@ -2,7 +2,10 @@ const database = (function () {
   const mongoose = require("mongoose");
   let dbInstance = null;
 
-  let _getDbInstance = function(connectionString) {
+  let _getDbInstance = function() {
+    let connectionString = process.env.CONNECTION || "mongodb://localhost:30000/bugDB";
+    console.log(`Database Connection: ${connectionString}`);
+
     if (!dbInstance) {
         //console.log("Creating New Instance");
       mongoose.connect(connectionString, {
@@ -24,8 +27,8 @@ const database = (function () {
   };
 
   return {
-    GetDbInstance(connectionString) {
-      return _getDbInstance(connectionString);
+    GetDbInstance() {
+      return _getDbInstance();
     },
   };
 })();

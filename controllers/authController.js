@@ -1,4 +1,4 @@
-const repo = require('../data/authRepository')();
+const repo = require('../data/authRepository');
 const authHelper = require('../authentication/authHelper');
 const passport = require('../authentication/local');
 
@@ -41,6 +41,10 @@ module.exports = {
                 })
             }
         })(req, res, next);
+    },
+    logout_a_user: (req, res, next) => {
+        req.logout();
+        handleResponse(res, 200, 'success');
     }
 };
 

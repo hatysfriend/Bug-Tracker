@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const repo = require('./authRepository')();
+const repo = require('./authRepository');
 
 module.exports = {
     seed: async () => {

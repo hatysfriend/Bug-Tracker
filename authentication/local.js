@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const repository = require('../data/authRepository')();
+const repository = require('../data/authRepository');
 const authHelper = require('./authHelper');
 const init = require('./passport');
 const options = {};

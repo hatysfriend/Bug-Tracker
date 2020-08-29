@@ -1,11 +1,8 @@
-module.exports = function (connectionString) {
+module.exports = (() => {
     const UserObject = require("./authSchemas");
     const database = require("./database");
   
-    let mongoose;
-    let currentString = connectionString || "mongodb://localhost:30000/bugDB";
-    console.log(`Testing using: ${currentString}`);
-    mongoose = database.GetDbInstance(currentString);
+    database.GetDbInstance();
     
     async function _getUser(userQuery) {
       return await UserObject.findOne(userQuery);   
@@ -31,4 +28,4 @@ module.exports = function (connectionString) {
         return _insertUser(user);
       }
     };
-  };  
+})();  

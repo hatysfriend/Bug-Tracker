@@ -4,8 +4,8 @@
   "description": "Bug Tracker",
   "main": "app.js",
   "scripts": {
-    "test": "docker run --name bugDB -p 30000:27017 -d mongo:latest && mocha test --exit || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && mocha test --exit",
-    "start": "docker run --name bugDB -p 30000:27017 -d mongo:latest && nodemon server.js || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && nodemon server.js"
+    "test": "docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/testDB&& mocha test --exit || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/testDB&& mocha test --exit",
+    "start": "docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/bobDB&& nodemon server.js || docker rm -f bugDB && docker run --name bugDB -p 30000:27017 -d mongo:latest && set CONNECTION=mongodb://localhost:30000/bobDB&& nodemon server.js"
   },
   "keywords": [
     "Bug"
@@ -32,5 +32,13 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^8.1.1"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": "2000",
+    "env": {}
   }
 }

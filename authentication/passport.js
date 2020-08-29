@@ -5,14 +5,15 @@ module.exports = () => {
     
     passport.serializeUser((user, done) => {
         console.log("USER serialize Used...........")
-        done(null, user.id);
+        done(null, user);
     });
 
-    passport.deserializeUser((id, done) => {
+    passport.deserializeUser((user, done) => {
         console.log("User Deserialized...........");
-        repo.GetUser({ _id: id })
-            .then((user) => {
-                done(null, user);
+        repo.GetUser({ username: user.username })
+            .then((userReturn) => {
+                console.log("We GOt HTe USer"+ userReturn);
+                done(null, userReturn);
             })
             .catch((err) => {
                 done(err, null);
