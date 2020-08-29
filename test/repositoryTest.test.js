@@ -11,7 +11,7 @@ afterEach(() => {
   repo.DeleteCollection();
 });
 
-describe("InsertSingleBug() - Repo Tests: ", () => {
+describe("InsertSingleBug() ->", () => {
   it("Returns Validation Error When Invalid Model Passed", (done) => {
     let dud = {
       dud: "rubbish",
@@ -51,7 +51,7 @@ describe("InsertSingleBug() - Repo Tests: ", () => {
   });
 });
 
-describe("GetAllBugs() - Repo Tests: ", () => {
+describe("GetAllBugs() ->", () => {
   it("Returns Not Null", (done) => {
     repo.InsertBugCollection(seedData.initialBugs);
     repo.GetAllBugs()

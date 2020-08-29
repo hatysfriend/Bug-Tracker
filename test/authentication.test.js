@@ -2,27 +2,32 @@ const chai = require("chai");
 const should = chai.should();
 const chaiHttp = require("chai-http");
 const server = require("../app");
-const seedData = require('../data/seedUserData');
+const seedData = require("../data/seedUserData");
 
 chai.use(chaiHttp);
 
-beforeEach(async () => {
-  await seedData.seed();
+
+beforeEach(() => {
+  seedData.seed();
 });
 
-describe("Logout Tests", () => {
+describe("Logout Tests ->", () => {
   it("should logout a user", (done) => {
-    chai
-      .request(server)
-      .get("/auth/logout")
-      .end((err, res) => {
-        should.not.exist(err);
+    let agent = chai.request.agent(server);
+    agent.post("/auth/login").send({
+      username: 'charmander',
+      password: 'password',
+    })
+    .then(() => {
+      agent.get("/auth/logout")
+      .then((res) => {
         res.redirects.length.should.eql(0);
         res.status.should.eql(200);
         res.type.should.eql("application/json");
         res.body.status.should.eql("success");
         done();
       });
+    });
   });
 
   it("Should throw error if a user is not logged in", (done) => {
@@ -39,7 +44,7 @@ describe("Logout Tests", () => {
   });
 });
 
-describe("Login Tests", () => {
+describe("Login Tests ->", () => {
   it("Should login a User", (done) => {
     chai
       .request(server)
@@ -77,7 +82,7 @@ describe("Login Tests", () => {
   });
 });
 
-describe("Register Tests", () => {
+describe("Register Tests ->", () => {
   it("Should register a new user", (done) => {
     chai
       .request(server)
