@@ -8,7 +8,7 @@ module.exports = function (connectionString) {
     mongoose = database.GetDbInstance(currentString);
     
     async function _getUser(userQuery) {
-      await UserObject.findOne(userQuery);
+      return await UserObject.findOne(userQuery);   
     }
 
     async function _deleteCollection() {
@@ -22,13 +22,13 @@ module.exports = function (connectionString) {
     
     return {
       GetUser(userQuery) {
-          return _getUser(userQuery);
+        return _getUser(userQuery);
       },
       DeleteCollection() {
         return _deleteCollection();
       },
       InsertUser(user) {
-          return _insertUser(user);
+        return _insertUser(user);
       }
     };
   };  

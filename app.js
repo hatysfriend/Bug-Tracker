@@ -16,15 +16,14 @@ app.set("views", "./src/views");
 app.set("view engine", "ejs");
 
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 app.use(session({
   secret: 'createSecretKey',
   resave: false,
   saveUninitialized: true
 }));
-
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());  
