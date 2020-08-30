@@ -10,7 +10,13 @@ module.exports = (() => {
 
   async function _insertSingleBug(bug) {
     let bugModel = new BugObject(bug);
-    return await bugModel.save()
+    return await bugModel.save();
+  }
+
+  async function _addTag(id, tag) {
+    let bug = await _getBugByID(id);
+    bug.tags.push(tag);
+    bug.save();
   }
 
   async function _getAllBugs() {
@@ -43,10 +49,13 @@ module.exports = (() => {
       return _deleteCollection();
     },
     GetBugByID(id) {
-      return _getBugByID(id)
+      return _getBugByID(id);
     },
     UpdateBug(bug) {
       return _updateBug(bug);
+    },
+    AddTag(id, tag) {
+      return _addTag(id, tag);
     }
   };
 })();

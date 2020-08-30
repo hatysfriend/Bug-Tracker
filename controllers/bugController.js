@@ -25,13 +25,23 @@ module.exports = {
     .catch((err) => {
       res.redirect("/error");
     })
-  }, 
+  },
+  
+  get_bug_by_id_json: async (req, res) => {
+    let bug = await repository.GetBugByID(req.body.bugID);
+    res.json(bug);
+  },
 
-  create_bug_get: async (req, res) =>{
+  create_bug_get: async (req, res) => {
     res.render("addbug");
   },
 
-  create_bug_post: async (req, res) =>{
+  add_tag: async (req, res) => {
+    repository.AddTag(req.body.id, req.body.tag);
+    res.send("OK");
+  },
+
+  create_bug_post: async (req, res) => {
     console.log(req.body);
     bug = {
       name: req.body.name,
@@ -52,7 +62,11 @@ module.exports = {
       });
   },
 
-  update_bug_status: async (req, res) =>{
+  update_bug: async (req, res) => {
+    return await repository.UpdateBug(req.body.bug);
+  },
+
+  update_bug_status: async (req, res) => {
     let bug = await repository.GetBugByID(req.body.bugID);
     bug.status = req.body.status;
     repository.UpdateBug(bug);
