@@ -6,15 +6,15 @@ const seedData = require("../data/seedUserData");
 
 chai.use(chaiHttp);
 
-
-beforeEach(() => {
-  seedData.seed();
+beforeEach(async () => {
+  await seedData.seed();
 });
 
 describe("Logout Tests ->", () => {
   it("should logout a user", (done) => {
     let agent = chai.request.agent(server);
-    agent.post("/auth/login").send({
+    agent.post("/auth/login")
+    .send({
       username: 'charmander',
       password: 'password',
     })

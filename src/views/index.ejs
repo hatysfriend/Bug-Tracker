@@ -33,13 +33,16 @@
       });
 
       let bug = await result.json();
+      
       handleNewBugClick();
       document.getElementById('bugId').value = bug._id;
       document.getElementById('name').setAttribute('value', bug.name);
       document.getElementById('status').innerHTML = '<span class="fas fa-bug text-'+bugColour(bug)+' mr-2"></span>' + bug.status;
       document.getElementById('description').value = bug.description;
+      document.getElementById('not-editable').innerHTML = bug.description;
       document.getElementById('modalTagList').innerHTML = tags(bug);
       document.getElementById('author').innerHTML = '<span class="badge badge-pill badge-light mr-2">'+bug.author.charAt(0)+'</span>' + bug.author;
+      init();
 
       let date = new Date(bug.date).toLocaleDateString();
       document.getElementById('date').innerHTML = date;
@@ -175,6 +178,49 @@
   }
 </script>
 
+<script>
+  async function updateDescription() {
+    let desc = document.getElementById('description').value;
+    let bugId = document.getElementById('bugId').value;
+    let updateObject = {
+      description: desc
+    }
+    console.log("Description Changed" + updateObject);
+    let result = await fetch('/bugs/update', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: bugId,
+        updateObject: updateObject
+      })
+    })
+
+  loadBugs();
+  editClick(bugId);
+  }
+</script>
+
+<script>
+  let isEditable = false;
+  async function showEditableDescription() {
+    let editable = document.getElementById('editable');
+    let notEditable = document.getElementById('not-editable');
+    isEditable = !isEditable;
+    if(isEditable) {
+      document.getElementById('descriptionContainer').innerHTML = editable.innerHTML;
+    }
+    else {
+      document.getElementById('descriptionContainer').innerHTML = notEditable.innerHTML;
+    }
+  }
+
+  var init = () => {
+    console.log("init");
+    let notEditable = document.getElementById('not-editable');
+    document.getElementById('descriptionContainer').innerHTML = notEditable.innerHTML;
+  }
+</script>
+
 <!--MODAL-->
 <div class="modal" tabindex="-1" role="dialog" id="addBugModal">
   <div class="modal-dialog" role="document">
@@ -193,8 +239,7 @@
         </div>
         <hr>
         <body>
-          <%- include('templates/scriptsection'); -%>
-      
+          <%- include('templates/scriptsection'); -%> 
           <div class="row">
             <div id="modalTagList"></div>
             <div class="dropdown">
@@ -234,13 +279,21 @@
               </div>
             </div>
           </div>
-          
-
-          <br>
-          <form method="POST" action="/bugs/addbug">              
-              <div class="form-group">
-                <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
-                <textarea name="description" id="description" class="form-control"></textarea><br>
+          <br>      
+              <div>
+                <div class="row">
+                  <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
+                  <button class="badge badge-light offset-2" id="edit-desc" onclick="showEditableDescription()">edit</button>
+                </div>
+                <div id="descriptionContainer">
+                </div>
+                <div id="choices" hidden>
+                  <div id="editable">
+                    <textarea onblur="updateDescription()" name="description" id="description" class="form-control"></textarea><br>
+                  </div>
+                  <div id="not-editable">
+                  </div>  
+                </div>                        
               </div>
       </body>
       <div class="row">
@@ -253,7 +306,6 @@
       <div class="modal-footer">
         <input class="btn btn-success" type="submit" value="Submit Bug">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </form>
       </div>
     </div>
   </div>

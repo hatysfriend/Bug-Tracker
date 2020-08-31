@@ -12,7 +12,7 @@ router.get("/seed", testController.seed_data);
 router.get("/addbug", bugController.create_bug_get);
 router.post("/addbug", bugController.create_bug_post);
 router.post('/updateStatus', bugController.update_bug_status);
-router.post('update', bugController.update_bug);
+router.post('/update', bugController.update_bug);
 router.post('/addTag', bugController.add_tag);
 
 module.exports = router;

@@ -31,8 +31,8 @@ module.exports = (() => {
     return await BugObject.findById(id);
   }
 
-  async function _updateBug(bug) {
-    return await _insertSingleBug(bug);
+  async function _updateBug(query) {
+    return await BugObject.findByIdAndUpdate(query.id, {$set: query.updateObject}, {upsert: false, new: true}, null);
   }
 
   return {

@@ -63,7 +63,8 @@ module.exports = {
   },
 
   update_bug: async (req, res) => {
-    return await repository.UpdateBug(req.body.bug);
+    await repository.UpdateBug(req.body);
+    res.send('OK');
   },
 
   update_bug_status: async (req, res) => {

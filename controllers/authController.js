@@ -7,7 +7,7 @@ module.exports = {
         let user = await authHelper.createEncryptedUser(req.body.username, req.body.password);
         repo.InsertUser(user)
             .then((response) => {
-                passport.authenticate('local', (errOne, userReturn, info) => {
+                passport.authenticate('local', (err, userReturn, info) => {
                     if(userReturn) {
                         //res.redirect('/index');
                         handleResponse(res, 200, 'success');
