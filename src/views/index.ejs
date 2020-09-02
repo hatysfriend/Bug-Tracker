@@ -35,12 +35,13 @@
       let bug = await result.json();
       handleNewBugClick();
       document.getElementById('bugId').value = bug._id;
-      document.getElementById('name').setAttribute('value', bug.name);
+      document.getElementById('name').innerHTML = bug.name;
       document.getElementById('status').innerHTML = '<span class="fas fa-bug text-'+bugColour(bug)+' mr-2"></span>' + bug.status;
       console.log("Lenght:" +bug.description);
       document.getElementById('description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";  
       document.getElementById('modalTagList').innerHTML = tags(bug);
       document.getElementById('author').innerHTML = '<span class="badge badge-pill badge-light mr-2">'+bug.author.charAt(0)+'</span>' + bug.author;
+      document.getElementById('prevTitle').value = bug.name;
 
       let date = new Date(bug.date).toLocaleDateString();
       document.getElementById('date').innerHTML = date;
@@ -69,7 +70,6 @@
           '<br>' +
           '<h5 class="card-title">' + bug.name + '</h5>' +
           '<hr>' +
-          '<p class="card-text">' + bug.description + '</p>' +
           '<span class="far fa-comments ml-4">  ' + bug.comments.length + '</span>' +
           '</div>' +
           '</div>' + 
@@ -89,7 +89,12 @@
           fixed.innerHTML += template(bug, tags(bug));
         }
       });
+
+      created.innerHTML += '<button type="button" id="addButton" class="btn btn-info">+ Add Another Card...</button>';
+      inProgress.innerHTML += '<button type="button" id="addButton" class="btn btn-info">+ Add Another Card...</button>';
+      fixed.innerHTML += '<button type="button" id="addButton" class="btn btn-info">+ Add Another Card...</button>';
     };
+    
 
     let bugStatusUpdater = async (bugID, status)=>{
       console.log(status);
@@ -175,19 +180,22 @@
     editClick(bugId);
   }
 
-  async function descClick() {
-    let desc = document.getElementById('description');
+  async function descClick(elementID) {
+    console.log('desClick:' + elementID);
+    let desc = document.getElementById(elementID);
     desc.classList.add('form-control');
     desc.setAttribute('onclick', 'null');
     desc.setAttribute('contenteditable', true);
     desc.focus();
   }
 
-  async function descFocusOut() {
-    let desc = document.getElementById('description');
+  async function descFocusOut(elementID) {
+    
+    let desc = document.getElementById(elementID);
     updateDescription();
     desc.classList.remove('form-control');
-    desc.setAttribute('onclick', 'descClick()');
+    desc.setAttribute('onclick', 'descClick(\''+elementID+'\')');
+    console.log('desFocusOut:' + elementID);
     desc.setAttribute('contenteditable', false);
   }
 
@@ -196,9 +204,21 @@
 <script>
   async function updateDescription() {
     let desc = document.getElementById('description').innerHTML;
+    let title = document.getElementById('name').innerHTML;
     let bugId = document.getElementById('bugId').value;
+    let prev = document.getElementById('prevTitle').value;
+
+    title.trim();
+    console.log(title); <!--FIX THIS-->
+    if(title.length <= 0 ) {
+      title = prev;
+    }
+    else if(title.length === 1) {
+      alert("Really?");
+    }
     let updateObject = {
-      description: desc
+      name: title,
+      description: desc,
     }
     console.log("Description Changed" + updateObject);
     let result = await fetch('/bugs/update', {
@@ -221,7 +241,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-            <input type="text" name="name" id="name" class="form-control" value="">
+            <input id=prevTitle hidden>
+            <span onclick="descClick('name')" onfocusout="descFocusOut('name')" name="name" id="name" class=""></span>
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -280,7 +301,7 @@
           <form method="POST" action="/bugs/addbug">              
               <div class="form-group">
                 <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
-                <div style="overflow-wrap: break-word; overflow: hidden; height:max-content;"  name="description" id="description" s onclick="descClick()" onfocusout="descFocusOut()" contenteditable="false" class=""></div><br>
+                <span name="description" id="description" onclick="descClick('description')" onfocusout="descFocusOut('description')" contenteditable="false" class=""></span><br>
               </div>
 
       </body>

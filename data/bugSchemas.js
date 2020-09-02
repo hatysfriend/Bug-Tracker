@@ -17,7 +17,7 @@ let bugSchema = new mongoose.Schema({
   name: { type: String, required: true },
   author: { type: String, required: true },
   status: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String },
   tags: [tagSchema],
   date: { type: Date, default: Date.now() },
   comments: [commentSchema],

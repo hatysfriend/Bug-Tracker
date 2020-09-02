@@ -21,7 +21,7 @@ describe("InsertSingleBug() ->", () => {
     repo.InsertSingleBug(dud)
       .catch((err) => {
         assert.strictEqual(
-          "bugs validation failed: description: Path `description` is required., status: Path `status` is required., author: Path `author` is required., name: Path `name` is required.",
+          "bugs validation failed: status: Path `status` is required., author: Path `author` is required., name: Path `name` is required.",
           err.message
         );
         done();

@@ -2,6 +2,7 @@
    border-width: 20rem;
    border:solid;
    border-color: aqua; 
+   height:max-content;
 }
 
 .weedle {
@@ -10,3 +11,10 @@
    margin-left: 1rem;
    margin-bottom: 1rem;
 }
+
+#description, #name, .modal-title, .card-title {
+   overflow-wrap: break-word; 
+   overflow: hidden; 
+   height:max-content;
+}
+
