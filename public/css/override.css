@@ -12,7 +12,13 @@
    margin-bottom: 1rem;
 }
 
-#description, #name, .modal-title, .card-title {
+#description, #name, .card-title {
+   overflow-wrap: break-word; 
+   overflow: hidden; 
+   height:max-content;
+}
+
+#modal-title {
    overflow-wrap: break-word; 
    overflow: hidden; 
    height:max-content;

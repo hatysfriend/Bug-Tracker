@@ -89,10 +89,16 @@
           fixed.innerHTML += template(bug, tags(bug));
         }
       });
-
-      created.innerHTML += '<button type="button" id="addButton" class="btn btn-info">+ Add Another Card...</button>';
-      inProgress.innerHTML += '<button type="button" id="addButton" class="btn btn-info">+ Add Another Card...</button>';
-      fixed.innerHTML += '<button type="button" id="addButton" class="btn btn-info">+ Add Another Card...</button>';
+      
+      function getButtonTemplate (status) {
+        let buttonTemplate = document.getElementById('addButtonTemplate').firstElementChild;
+        buttonTemplate.setAttribute('id', 'btn'+status);
+        return buttonTemplate.outerHTML;
+      }
+      
+      created.innerHTML += getButtonTemplate('Created');
+      inProgress.innerHTML += getButtonTemplate('In-Progress');
+      fixed.innerHTML += getButtonTemplate('Fixed');
     };
     
 
@@ -129,6 +135,15 @@
   <script>
     function handleNewBugClick() {
       $('#addBugModal').modal('show');
+    }
+  </script>
+
+  <script>
+    function addCardMini(id) {
+      console.log(id);
+      let btnClicked = document.getElementById(id);
+      let template = document.getElementById('addNewBugTemplate');
+      btnClicked.outerHTML = template.outerHTML;
     }
   </script>
 
@@ -198,7 +213,6 @@
     console.log('desFocusOut:' + elementID);
     desc.setAttribute('contenteditable', false);
   }
-
 </script>
 
 <script>
@@ -209,12 +223,9 @@
     let prev = document.getElementById('prevTitle').value;
 
     title.trim();
-    console.log(title); <!--FIX THIS-->
-    if(title.length <= 0 ) {
+    console.log(title);
+    if(title.length <= 0) {
       title = prev;
-    }
-    else if(title.length === 1) {
-      alert("Really?");
     }
     let updateObject = {
       name: title,
@@ -244,9 +255,9 @@
             <input id=prevTitle hidden>
             <span onclick="descClick('name')" onfocusout="descFocusOut('name')" name="name" id="name" class=""></span>
         </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <href data-dismiss="modal" class="close" aria-label="Close" onfocus="" style="cursor: pointer;">
+          <span class="fas fa-times-circle" aria-hidden="true"></span>
+        </href>
       </div>
       <div class="modal-body">
         <div class="">
@@ -298,13 +309,14 @@
           
 
           <br>
-          <form method="POST" action="/bugs/addbug">              
-              <div class="form-group">
+              <div style="min-height:100px;" class="form-group">
                 <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
-                <span name="description" id="description" onclick="descClick('description')" onfocusout="descFocusOut('description')" contenteditable="false" class=""></span><br>
+                <div id="descriptionDiv" onclick="descClick('description')" onfocusout="descFocusOut('description')"> 
+                  <span style="min-height:100px;" name="description" id="description"  contenteditable="false" class=""></span><br>  
+                </div>
               </div>
-
       </body>
+      <hr>
       <div class="row">
         <div name="author" id="author" class="col-4">
         </div>
@@ -312,11 +324,19 @@
         </div>
       </div>        
       </div>        
-      <div class="modal-footer">
-        <input class="btn btn-success" type="submit" value="Submit Bug">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </form>
-      </div>
     </div>
   </div>
 </div>
+
+
+<!--TEMPLATES-->
+<div id="templates" hidden>
+  <div id="addButtonTemplate">
+    <input onclick="addCardMini(this.id)" type="button" id="buttonTemplate" class="btn btn-block btn-info" value="+ Add Another Card"/>
+  </div>
+
+  <div id="addNewBugTemplate">
+    <textarea id="addNewBugTemplate" class="form-control">Add a title here...</textarea>
+  </div>
+</div>
+
