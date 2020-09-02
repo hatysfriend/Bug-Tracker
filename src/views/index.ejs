@@ -33,16 +33,14 @@
       });
 
       let bug = await result.json();
-      
       handleNewBugClick();
       document.getElementById('bugId').value = bug._id;
       document.getElementById('name').setAttribute('value', bug.name);
       document.getElementById('status').innerHTML = '<span class="fas fa-bug text-'+bugColour(bug)+' mr-2"></span>' + bug.status;
-      document.getElementById('description').value = bug.description;
-      document.getElementById('not-editable').innerHTML = bug.description;
+      console.log("Lenght:" +bug.description);
+      document.getElementById('description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";  
       document.getElementById('modalTagList').innerHTML = tags(bug);
       document.getElementById('author').innerHTML = '<span class="badge badge-pill badge-light mr-2">'+bug.author.charAt(0)+'</span>' + bug.author;
-      init();
 
       let date = new Date(bug.date).toLocaleDateString();
       document.getElementById('date').innerHTML = date;
@@ -176,11 +174,28 @@
     loadBugs();
     editClick(bugId);
   }
+
+  async function descClick() {
+    let desc = document.getElementById('description');
+    desc.classList.add('form-control');
+    desc.setAttribute('onclick', 'null');
+    desc.setAttribute('contenteditable', true);
+    desc.focus();
+  }
+
+  async function descFocusOut() {
+    let desc = document.getElementById('description');
+    updateDescription();
+    desc.classList.remove('form-control');
+    desc.setAttribute('onclick', 'descClick()');
+    desc.setAttribute('contenteditable', false);
+  }
+
 </script>
 
 <script>
   async function updateDescription() {
-    let desc = document.getElementById('description').value;
+    let desc = document.getElementById('description').innerHTML;
     let bugId = document.getElementById('bugId').value;
     let updateObject = {
       description: desc
@@ -197,27 +212,6 @@
 
   loadBugs();
   editClick(bugId);
-  }
-</script>
-
-<script>
-  let isEditable = false;
-  async function showEditableDescription() {
-    let editable = document.getElementById('editable');
-    let notEditable = document.getElementById('not-editable');
-    isEditable = !isEditable;
-    if(isEditable) {
-      document.getElementById('descriptionContainer').innerHTML = editable.innerHTML;
-    }
-    else {
-      document.getElementById('descriptionContainer').innerHTML = notEditable.innerHTML;
-    }
-  }
-
-  var init = () => {
-    console.log("init");
-    let notEditable = document.getElementById('not-editable');
-    document.getElementById('descriptionContainer').innerHTML = notEditable.innerHTML;
   }
 </script>
 
@@ -239,7 +233,8 @@
         </div>
         <hr>
         <body>
-          <%- include('templates/scriptsection'); -%> 
+          <%- include('templates/scriptsection'); -%>
+      
           <div class="row">
             <div id="modalTagList"></div>
             <div class="dropdown">
@@ -279,22 +274,15 @@
               </div>
             </div>
           </div>
-          <br>      
-              <div>
-                <div class="row">
-                  <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
-                  <button class="badge badge-light offset-2" id="edit-desc" onclick="showEditableDescription()">edit</button>
-                </div>
-                <div id="descriptionContainer">
-                </div>
-                <div id="choices" hidden>
-                  <div id="editable">
-                    <textarea onblur="updateDescription()" name="description" id="description" class="form-control"></textarea><br>
-                  </div>
-                  <div id="not-editable">
-                  </div>  
-                </div>                        
+          
+
+          <br>
+          <form method="POST" action="/bugs/addbug">              
+              <div class="form-group">
+                <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
+                <div style="overflow-wrap: break-word; overflow: hidden; height:max-content;"  name="description" id="description" s onclick="descClick()" onfocusout="descFocusOut()" contenteditable="false" class=""></div><br>
               </div>
+
       </body>
       <div class="row">
         <div name="author" id="author" class="col-4">
@@ -306,6 +294,7 @@
       <div class="modal-footer">
         <input class="btn btn-success" type="submit" value="Submit Bug">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </form>
       </div>
     </div>
   </div>
