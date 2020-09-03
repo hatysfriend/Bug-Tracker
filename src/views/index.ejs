@@ -89,18 +89,20 @@
           fixed.innerHTML += template(bug, tags(bug));
         }
       });
-      
-      function getButtonTemplate (status) {
-        let buttonTemplate = document.getElementById('addButtonTemplate').firstElementChild;
-        buttonTemplate.setAttribute('id', 'btn'+status);
-        return buttonTemplate.outerHTML;
-      }
-      
+
       created.innerHTML += getButtonTemplate('Created');
       inProgress.innerHTML += getButtonTemplate('In-Progress');
       fixed.innerHTML += getButtonTemplate('Fixed');
     };
     
+    function getButtonTemplate (status) {
+      let button = document.createElement('bug-new-button');
+      let shadowButton = button.shadowRoot.firstElementChild;
+      shadowButton.setAttribute('id', 'btn'+status);
+      console.log(shadowButton);
+      return shadowButton.outerHTML;
+    }
+      
 
     let bugStatusUpdater = async (bugID, status)=>{
       console.log(status);
@@ -139,12 +141,20 @@
   </script>
 
   <script>
-    function addCardMini(id) {
-      console.log(id);
-      let btnClicked = document.getElementById(id);
-      let template = document.getElementById('addNewBugTemplate');
-      btnClicked.outerHTML = template.outerHTML;
+    function addCardMini(button) {
+      console.log(button);
+      let template = document.createElement('bug-new-form');
+      let shadowTemplate = template.shadowRoot.firstElementChild;
+      console.log(shadowTemplate);
+      button.outerHTML = shadowTemplate.outerHTML;
     }
+
+    async function addBugFocusOut(elementID) {
+    let addBugTemplate = document.getElementById(elementID);
+    let status = addBugTemplate.getAttribute('status');
+    let addButton = getButtonTemplate(status);
+    addBugTemplate.outerHTML = addButton;
+  }
   </script>
 
   <div>
@@ -205,7 +215,6 @@
   }
 
   async function descFocusOut(elementID) {
-    
     let desc = document.getElementById(elementID);
     updateDescription();
     desc.classList.remove('form-control');
@@ -329,14 +338,41 @@
 </div>
 
 
+
 <!--TEMPLATES-->
 <div id="templates" hidden>
-  <div id="addButtonTemplate">
-    <input onclick="addCardMini(this.id)" type="button" id="buttonTemplate" class="btn btn-block btn-info" value="+ Add Another Card"/>
-  </div>
+  <template id="addButtonTemplate">
+    <input onclick="addCardMini(this)" type="button" id="buttonTemplate" status="" class="btn btn-block btn-info" value="+ Add Another Card"/>
+  </template>
 
-  <div id="addNewBugTemplate">
-    <textarea id="addNewBugTemplate" class="form-control">Add a title here...</textarea>
-  </div>
+  <template id="addNewBugTemplate">
+    <textarea id="addNewBugTemplate" status="" onfocusout="addBugFocusOut('addNewBugTemplate')" class="form-control">Add a title here...</textarea><br>
+    <button type="button" onclick="addBugFocusOut('addNewBugTemplate')">Add Bug</button>
+    <href data-dismiss="modal" class="close" aria-label="Close" onfocus="" style="cursor: pointer;">
+      <span class="fas fa-times-circle" aria-hidden="true"></span>
+    </href>
+  </template>
+
 </div>
+
+<script>
+  let addBugTemplate = document.getElementById('addNewBugTemplate');
+    window.customElements.define('bug-new-form', class extends HTMLElement{
+      constructor(){
+        super();
+
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(addBugTemplate.content.cloneNode(true));
+      }
+    });
+
+  let addBugButtonTemplate = document.getElementById('addButtonTemplate'); 
+  window.customElements.define('bug-new-button', class extends HTMLElement{
+      constructor(){
+        super();
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(addBugButtonTemplate.content.cloneNode(true));
+      }
+    });
+</script>
 
