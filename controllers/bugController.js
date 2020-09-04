@@ -71,6 +71,20 @@ module.exports = {
     let bug = await repository.GetBugByID(req.body.bugID);
     bug.status = req.body.status;
     repository.UpdateBug(bug);
+  },
+
+  get_bug_view_component: async (req, res) => {
+    bugs = await repository.GetAllBugs();
+    res.render('/Components/anotherComponent/renderBugComponent',
+      (err, result) => {
+        if(err) {
+          res.redirect('/error');
+        } 
+        else {
+          res.send(require('ejs').render(result, bugs));
+        }
+      }
+    )
   }
 };
 

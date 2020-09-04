@@ -5,28 +5,28 @@
     let tags = function (bug) {
       let tags = "";
       bug.tags.forEach(tag => {
-        tags += '<span class="mx-1 my-1 badge badge-' + tag.colour+ '">' + tag.name + '</span>'
+        tags += '<span class="mx-1 my-1 badge badge-' + tag.colour + '">' + tag.name + '</span>'
       });
       return tags;
     }
 
     let bugColour = (bug) => {
       if (bug.status === 'Created') {
-          return 'danger';
-        }
-        if (bug.status === 'In-Progress') {
-          return 'warning';
-        }
-        if (bug.status === 'Fixed') {
-          return 'success';
-        }
+        return 'danger';
+      }
+      if (bug.status === 'In-Progress') {
+        return 'warning';
+      }
+      if (bug.status === 'Fixed') {
+        return 'success';
+      }
     }
 
     let editClick = async (bugId) => {
-      console.log("Clicked: " +bugId);
+      console.log("Clicked: " + bugId);
       let result = await fetch('/bugs/getBugByIdJson', {
         method: 'POST',
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bugID: bugId
         })
@@ -36,11 +36,11 @@
       handleNewBugClick();
       document.getElementById('bugId').value = bug._id;
       document.getElementById('name').innerHTML = bug.name;
-      document.getElementById('status').innerHTML = '<span class="fas fa-bug text-'+bugColour(bug)+' mr-2"></span>' + bug.status;
-      console.log("Lenght:" +bug.description);
-      document.getElementById('description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";  
+      document.getElementById('status').innerHTML = '<span class="fas fa-bug text-' + bugColour(bug) + ' mr-2"></span>' + bug.status;
+      console.log("Lenght:" + bug.description);
+      document.getElementById('description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";
       document.getElementById('modalTagList').innerHTML = tags(bug);
-      document.getElementById('author').innerHTML = '<span class="badge badge-pill badge-light mr-2">'+bug.author.charAt(0)+'</span>' + bug.author;
+      document.getElementById('author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
       document.getElementById('prevTitle').value = bug.name;
 
       let date = new Date(bug.date).toLocaleDateString();
@@ -60,11 +60,11 @@
       fixed.innerHTML = null;
 
       let template = function (bug, tags) {
-        let template = '<li class="list-group-item" bugid="'+bug._id+'"' +
+        let template = '<li class="list-group-item" bugid="' + bug._id + '"' +
           '<div class="card">' +
           '<div class="card-body">' +
           '<div class="row">' +
-          '<button onclick="editClick(\''+bug._id+'\')" class="badge badge-light col-1 offset-11"><span class="fa fa-edit"></span></button>' +
+          '<button onclick="editClick(\'' + bug._id + '\')" class="badge badge-light col-1 offset-11"><span class="fa fa-edit"></span></button>' +
           tags +
           '</div>' +
           '<br>' +
@@ -72,7 +72,7 @@
           '<hr>' +
           '<span class="far fa-comments ml-4">  ' + bug.comments.length + '</span>' +
           '</div>' +
-          '</div>' + 
+          '</div>' +
           '</li>'
         return template;
       }
@@ -90,25 +90,34 @@
         }
       });
 
-      created.innerHTML += getButtonTemplate('Created');
-      inProgress.innerHTML += getButtonTemplate('In-Progress');
-      fixed.innerHTML += getButtonTemplate('Fixed');
+      document.getElementById('addButtonContainerCreated').innerHTML = getButtonTemplate('Created');
+      document.getElementById('addButtonContainerIn-Progress').innerHTML = getButtonTemplate('In-Progress');
+      document.getElementById('addButtonContainerFixed').innerHTML = getButtonTemplate('Fixed');
+
+      function Test (bug) {
+      let button = document.createElement('render-bug-component');
+      button.bug = bug;
+      console.log("Got A Bug: "+button);
+    }
+
+    Test(json[0]);
     };
+
+    //TEST
     
-    function getButtonTemplate (status) {
+
+    function getButtonTemplate(status) {
       let button = document.createElement('bug-new-button');
       let shadowButton = button.shadowRoot.firstElementChild;
-      shadowButton.setAttribute('id', 'btn'+status);
-      console.log(shadowButton);
+      shadowButton.setAttribute('status', status);
       return shadowButton.outerHTML;
     }
-      
 
-    let bugStatusUpdater = async (bugID, status)=>{
+    let bugStatusUpdater = async (bugID, status) => {
       console.log(status);
       let result = await fetch('/bugs/updateStatus', {
         method: 'POST',
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bugID: bugID,
           status: status
@@ -122,7 +131,7 @@
         document.querySelector("#In-Progress"),
         document.querySelector("#Fixed"),
       ]).on('drop', function (el, target) {
-          bugStatusUpdater(el.getAttribute('bugid'), target.getAttribute('id'));
+        bugStatusUpdater(el.getAttribute('bugid'), target.getAttribute('id'));
       });
       console.log("Loaded");
     };
@@ -141,20 +150,27 @@
   </script>
 
   <script>
-    function addCardMini(button) {
-      console.log(button);
-      let template = document.createElement('bug-new-form');
-      let shadowTemplate = template.shadowRoot.firstElementChild;
-      console.log(shadowTemplate);
-      button.outerHTML = shadowTemplate.outerHTML;
+    function addCardMini(element) {
+      let bugContents = element.closest('#addBugContents');
+      let formTemplate = bugContents.querySelector('#addBugFormTemplate');
+      let buttonTemplate = bugContents.querySelector('#buttonTemplate');
+      buttonTemplate.toggleAttribute('hidden');
+      formTemplate.toggleAttribute('hidden');
+
+      if(element.classList.contains('close')){
+        console.log('Closing');
+        return;
+      }
+      console.log("We Called Add Card Mini With The Status: "+bugContents.getAttribute('status'));
     }
 
-    async function addBugFocusOut(elementID) {
-    let addBugTemplate = document.getElementById(elementID);
-    let status = addBugTemplate.getAttribute('status');
-    let addButton = getButtonTemplate(status);
-    addBugTemplate.outerHTML = addButton;
-  }
+     function addBugFocusOut(textarea) {
+      let addBugTemplate = textarea.parentNode;
+      let addButton = addBugTemplate.previousElementSibling;
+      console.log(addBugTemplate);
+      addBugTemplate.toggleAttribute("hidden");
+      addButton.toggleAttribute("hidden");
+    }
   </script>
 
   <div>
@@ -168,12 +184,27 @@
       <h5 class="alert alert-warning col-4">In-Progress</h5>
       <h5 class="alert alert-success col-4">Fixed</h5>
     </div>
-    <div class="row">
-      <div class="container col-3" id="Created" >
+
+    <div class="row" id="containerGroup">
+      <div class="col-4">
+        <div class="container" id="Created">
+        </div>
+        <div class="" id="addButtonContainerCreated">
+        </div>
       </div>
-      <div class="container col-3" id="In-Progress">
+
+      <div class="col-4">
+        <div class="container" id="In-Progress">
+        </div>
+        <div class="" id="addButtonContainerIn-Progress">
+        </div>
       </div>
-      <div class="container col-3" id="Fixed">
+
+      <div class="col-4">
+        <div class="container" id="Fixed">
+        </div>
+        <div class="" id="addButtonContainerFixed">
+        </div>
       </div>
     </div>
   </div>
@@ -184,21 +215,22 @@
   function setColour(colour) {
     tagColour = colour;
   }
-  
+
   async function addTag() {
     let bugId = document.getElementById('bugId').value;
     let tagName = document.getElementById('tag-name').value;
     let tag = {
-      name: tagName, 
+      name: tagName,
       colour: tagColour
     };
+
     let result = await fetch('/bugs/addTag', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          id: bugId,
-          tag: tag  
-        })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: bugId,
+        tag: tag
+      })
     });
 
     loadBugs();
@@ -218,7 +250,7 @@
     let desc = document.getElementById(elementID);
     updateDescription();
     desc.classList.remove('form-control');
-    desc.setAttribute('onclick', 'descClick(\''+elementID+'\')');
+    desc.setAttribute('onclick', 'descClick(\'' + elementID + '\')');
     console.log('desFocusOut:' + elementID);
     desc.setAttribute('contenteditable', false);
   }
@@ -233,7 +265,7 @@
 
     title.trim();
     console.log(title);
-    if(title.length <= 0) {
+    if (title.length <= 0) {
       title = prev;
     }
     let updateObject = {
@@ -243,15 +275,15 @@
     console.log("Description Changed" + updateObject);
     let result = await fetch('/bugs/update', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: bugId,
         updateObject: updateObject
       })
     })
 
-  loadBugs();
-  editClick(bugId);
+    loadBugs();
+    editClick(bugId);
   }
 </script>
 
@@ -261,10 +293,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-            <input id=prevTitle hidden>
-            <span onclick="descClick('name')" onfocusout="descFocusOut('name')" name="name" id="name" class=""></span>
+          <input id=prevTitle hidden>
+          <span onclick="descClick('name')" onfocusout="descFocusOut('name')" name="name" id="name" class=""></span>
         </h5>
-      <href data-dismiss="modal" class="close" aria-label="Close" onfocus="" style="cursor: pointer;">
+        <href data-dismiss="modal" class="close" aria-label="Close" onfocus="" style="cursor: pointer;">
           <span class="fas fa-times-circle" aria-hidden="true"></span>
         </href>
       </div>
@@ -273,13 +305,15 @@
           <h5 class="" name="status" id="status"></h5>
         </div>
         <hr>
+
         <body>
           <%- include('templates/scriptsection'); -%>
-      
+
           <div class="row">
             <div id="modalTagList"></div>
             <div class="dropdown">
-              <button class="badge badge-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="badge badge-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="fa fa-plus"></span>
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -292,87 +326,53 @@
                     <div>
                       <div id="btn-toolbar" class="btn-toolbar" role="toolbar">
                         <div class="btn-group mr-2 mb-2" role="group">
-                          <button type="button" class="btn btn-success" onclick="setColour(this.value)" value="success"></button>
+                          <button type="button" class="btn btn-success" onclick="setColour(this.value)"
+                            value="success"></button>
                         </div>
                         <div class="btn-group mr-2 mb-2" role="group">
-                          <button type="button" class="btn btn-info" onclick="setColour(this.value)" value="info"></button>
+                          <button type="button" class="btn btn-info" onclick="setColour(this.value)"
+                            value="info"></button>
                         </div>
                         <div class="btn-group mr-2 mb-2" role="group">
-                          <button type="button" class="btn btn-warning" onclick="setColour(this.value)" value="warning"></button>
+                          <button type="button" class="btn btn-warning" onclick="setColour(this.value)"
+                            value="warning"></button>
                         </div>
                         <div class="btn-group mr-2 mb-2" role="group">
-                          <button type="button" class="btn btn-secondary" onclick="setColour(this.value)" value="secondary"></button>
+                          <button type="button" class="btn btn-secondary" onclick="setColour(this.value)"
+                            value="secondary"></button>
                         </div>
                         <div class="btn-group mr-2 mb-2" role="group">
-                          <button type="button" class="btn btn-danger" onclick="setColour(this.value)" value="danger"></button>
+                          <button type="button" class="btn btn-danger" onclick="setColour(this.value)"
+                            value="danger"></button>
                         </div>
                       </div>
-                    </div>              
+                    </div>
                     <hr>
                     <input onclick="addTag()" class="btn btn-success form-control" type="button" value="Create">
                   </div>
-                </form>             
+                </form>
               </div>
             </div>
           </div>
-          
+
 
           <br>
-              <div style="min-height:100px;" class="form-group">
-                <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
-                <div id="descriptionDiv" onclick="descClick('description')" onfocusout="descFocusOut('description')"> 
-                  <span style="min-height:100px;" name="description" id="description"  contenteditable="false" class=""></span><br>  
-                </div>
-              </div>
-      </body>
-      <hr>
-      <div class="row">
-        <div name="author" id="author" class="col-4">
+          <div style="min-height:100px;" class="form-group">
+            <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
+            <div id="descriptionDiv" onclick="descClick('description')" onfocusout="descFocusOut('description')">
+              <span style="min-height:100px;" name="description" id="description" contenteditable="false"
+                class=""></span><br>
+            </div>
+          </div>
+        </body>
+        <hr>
+        <div class="row">
+          <div name="author" id="author" class="col-4">
+          </div>
+          <div name="date" id="date" class="col-2 offset-5">
+          </div>
         </div>
-        <div name="date" id="date" class="col-2 offset-5">
-        </div>
-      </div>        
-      </div>        
+      </div>
     </div>
   </div>
 </div>
-
-
-
-<!--TEMPLATES-->
-<div id="templates" hidden>
-  <template id="addButtonTemplate">
-    <input onclick="addCardMini(this)" type="button" id="buttonTemplate" status="" class="btn btn-block btn-info" value="+ Add Another Card"/>
-  </template>
-
-  <template id="addNewBugTemplate">
-    <textarea id="addNewBugTemplate" status="" onfocusout="addBugFocusOut('addNewBugTemplate')" class="form-control">Add a title here...</textarea><br>
-    <button type="button" onclick="addBugFocusOut('addNewBugTemplate')">Add Bug</button>
-    <href data-dismiss="modal" class="close" aria-label="Close" onfocus="" style="cursor: pointer;">
-      <span class="fas fa-times-circle" aria-hidden="true"></span>
-    </href>
-  </template>
-
-</div>
-
-<script>
-  let addBugTemplate = document.getElementById('addNewBugTemplate');
-    window.customElements.define('bug-new-form', class extends HTMLElement{
-      constructor(){
-        super();
-
-        let shadowRoot = this.attachShadow({mode: 'open'});
-        shadowRoot.appendChild(addBugTemplate.content.cloneNode(true));
-      }
-    });
-
-  let addBugButtonTemplate = document.getElementById('addButtonTemplate'); 
-  window.customElements.define('bug-new-button', class extends HTMLElement{
-      constructor(){
-        super();
-        let shadowRoot = this.attachShadow({mode: 'open'});
-        shadowRoot.appendChild(addBugButtonTemplate.content.cloneNode(true));
-      }
-    });
-</script>
-

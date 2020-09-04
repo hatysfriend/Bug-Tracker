@@ -3,6 +3,7 @@
    border:solid;
    border-color: aqua; 
    height:max-content;
+   min-height:2rem;
 }
 
 .weedle {

@@ -14,5 +14,6 @@ router.post("/addbug", bugController.create_bug_post);
 router.post('/updateStatus', bugController.update_bug_status);
 router.post('/update', bugController.update_bug);
 router.post('/addTag', bugController.add_tag);
+router.get('/getBugViewComponent', bugController.get_bug_view_component)
 
 module.exports = router;
