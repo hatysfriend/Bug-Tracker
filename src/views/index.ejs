@@ -1,28 +1,31 @@
 <%- include('templates/header'); -%>
 
-<body>
-  <script>
-    let tags = function (bug) {
-      let tags = "";
-      bug.tags.forEach(tag => {
-        tags += '<span class="mx-1 my-1 badge badge-' + tag.colour + '">' + tag.name + '</span>'
-      });
-      return tags;
-    }
 
-    let bugColour = (bug) => {
-      if (bug.status === 'Created') {
-        return 'danger';
-      }
-      if (bug.status === 'In-Progress') {
-        return 'warning';
-      }
-      if (bug.status === 'Fixed') {
-        return 'success';
-      }
-    }
+<body>
+  <%- include('templates/scriptsection'); -%>
+  <script>
+    // let tags = function (bug) {
+    //   let tags = "";
+    //   bug.tags.forEach(tag => {
+    //     tags += '<span class="mx-1 my-1 badge badge-' + tag.colour + '">' + tag.name + '</span>'
+    //   });
+    //   return tags;
+    // }
+
+    // let bugColour = (bug) => {
+    //   if (bug.status === 'Created') {
+    //     return 'danger';
+    //   }
+    //   if (bug.status === 'In-Progress') {
+    //     return 'warning';
+    //   }
+    //   if (bug.status === 'Fixed') {
+    //     return 'success';
+    //   }
+    // }
 
     let editClick = async (bugId) => {
+      console.log('We Got HERE!!');
       console.log("Clicked: " + bugId);
       let result = await fetch('/bugs/getBugByIdJson', {
         method: 'POST',
@@ -33,18 +36,27 @@
       });
 
       let bug = await result.json();
-      handleNewBugClick();
-      document.getElementById('bugId').value = bug._id;
-      document.getElementById('name').innerHTML = bug.name;
-      document.getElementById('status').innerHTML = '<span class="fas fa-bug text-' + bugColour(bug) + ' mr-2"></span>' + bug.status;
-      console.log("Lenght:" + bug.description);
-      document.getElementById('description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";
-      document.getElementById('modalTagList').innerHTML = tags(bug);
-      document.getElementById('author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
-      document.getElementById('prevTitle').value = bug.name;
+      let modalContainer = document.getElementById('modalContainer');
+      
+      if(modalContainer.childElementCount <= 0) {
+        let modalComponent = document.createElement('bug-modal-component');
+        modalComponent.bug = bug;
+        modalContainer.innerHTML = modalComponent.shadowRoot.firstElementChild.outerHTML;
+      }
+      showBugModal();
+      // modalComponent.shadowRoot.firstElementChild.outerHTML;
 
-      let date = new Date(bug.date).toLocaleDateString();
-      document.getElementById('date').innerHTML = date;
+      // document.getElementById('bugId').value = bug._id;
+      // document.getElementById('name').innerHTML = bug.name;
+      // document.getElementById('status').innerHTML = '<span class="fas fa-bug text-' + bugColour(bug) + ' mr-2"></span>' + bug.status;
+      // console.log("Lenght:" + bug.description);
+      // document.getElementById('description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";
+      // document.getElementById('modalTagList').innerHTML = tags(bug);
+      // document.getElementById('author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
+      // document.getElementById('prevTitle').value = bug.name;
+
+      // let date = new Date(bug.date).toLocaleDateString();
+      // document.getElementById('date').innerHTML = date;
     }
 
     let loadBugs = async () => {
@@ -58,54 +70,31 @@
       created.innerHTML = null;
       inProgress.innerHTML = null;
       fixed.innerHTML = null;
-
-      let template = function (bug, tags) {
-        let template = '<li class="list-group-item" bugid="' + bug._id + '"' +
-          '<div class="card">' +
-          '<div class="card-body">' +
-          '<div class="row">' +
-          '<button onclick="editClick(\'' + bug._id + '\')" class="badge badge-light col-1 offset-11"><span class="fa fa-edit"></span></button>' +
-          tags +
-          '</div>' +
-          '<br>' +
-          '<h5 class="card-title">' + bug.name + '</h5>' +
-          '<hr>' +
-          '<span class="far fa-comments ml-4">  ' + bug.comments.length + '</span>' +
-          '</div>' +
-          '</div>' +
-          '</li>'
-        return template;
-      }
-
+ 
       json.forEach(bug => {
         console.log(bug);
         if (bug.status === 'Created') {
-          created.innerHTML += template(bug, tags(bug));
+          created.innerHTML += InitializeTemplate(bug);
         }
         if (bug.status === 'In-Progress') {
-          inProgress.innerHTML += template(bug, tags(bug));
+          inProgress.innerHTML += InitializeTemplate(bug);
         }
         if (bug.status === 'Fixed') {
-          fixed.innerHTML += template(bug, tags(bug));
+          fixed.innerHTML += InitializeTemplate(bug);
         }
       });
+
+      function InitializeTemplate(bug) {
+        let button = document.createElement('render-bug-component');
+        button.bug = bug;
+        return button.shadowRoot.firstElementChild.outerHTML;
+      }
 
       document.getElementById('addButtonContainerCreated').innerHTML = getButtonTemplate('Created');
       document.getElementById('addButtonContainerIn-Progress').innerHTML = getButtonTemplate('In-Progress');
       document.getElementById('addButtonContainerFixed').innerHTML = getButtonTemplate('Fixed');
-
-      function Test (bug) {
-      let button = document.createElement('render-bug-component');
-      button.bug = bug;
-      console.log("Got A Bug: "+button);
-    }
-
-    Test(json[0]);
     };
-
-    //TEST
     
-
     function getButtonTemplate(status) {
       let button = document.createElement('bug-new-button');
       let shadowButton = button.shadowRoot.firstElementChild;
@@ -144,7 +133,7 @@
   </script>
 
   <script>
-    function handleNewBugClick() {
+    function showBugModal() {
       $('#addBugModal').modal('show');
     }
   </script>
@@ -157,14 +146,14 @@
       buttonTemplate.toggleAttribute('hidden');
       formTemplate.toggleAttribute('hidden');
 
-      if(element.classList.contains('close')){
+      if(element.classList.contains('close')) {
         console.log('Closing');
         return;
       }
       console.log("We Called Add Card Mini With The Status: "+bugContents.getAttribute('status'));
     }
 
-     function addBugFocusOut(textarea) {
+    function addBugFocusOut(textarea) {
       let addBugTemplate = textarea.parentNode;
       let addButton = addBugTemplate.previousElementSibling;
       console.log(addBugTemplate);
@@ -247,6 +236,7 @@
   }
 
   async function descFocusOut(elementID) {
+    console.log("HERE?");
     let desc = document.getElementById(elementID);
     updateDescription();
     desc.classList.remove('form-control');
@@ -262,6 +252,7 @@
     let title = document.getElementById('name').innerHTML;
     let bugId = document.getElementById('bugId').value;
     let prev = document.getElementById('prevTitle').value;
+    
 
     title.trim();
     console.log(title);
@@ -281,13 +272,16 @@
         updateObject: updateObject
       })
     })
-
+    console.log("ARE WE STUCK?");
     loadBugs();
     editClick(bugId);
   }
 </script>
 
-<!--MODAL-->
+<div id="modalContainer">
+</div>
+
+<!-- MODAL
 <div class="modal" tabindex="-1" role="dialog" id="addBugModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -307,7 +301,7 @@
         <hr>
 
         <body>
-          <%- include('templates/scriptsection'); -%>
+          
 
           <div class="row">
             <div id="modalTagList"></div>
@@ -354,8 +348,6 @@
               </div>
             </div>
           </div>
-
-
           <br>
           <div style="min-height:100px;" class="form-group">
             <label for="description"><span class="fas fa-list-ul mr-1"></span> Description </label><br>
@@ -375,4 +367,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
