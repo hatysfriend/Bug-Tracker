@@ -26,7 +26,7 @@ fetch("/components/RenderBugComponent/renderBugComponent.html")
 
                 initializeTemplate (bug) {
                     let container = this.shadowDom.getElementById('bugCardContent');
-                    container.setAttribute('Muppet', 'Dog');
+                    container.setAttribute('bugid', bug._id);
                     let listItem = container.getElementsByClassName('list-group-item');
                     listItem[0].setAttribute('bugid', bug._id);
                     container.querySelector('#editButton').setAttribute('id', bug._id);

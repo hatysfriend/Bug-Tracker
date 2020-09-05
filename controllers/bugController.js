@@ -67,12 +67,6 @@ module.exports = {
     res.send('OK');
   },
 
-  update_bug_status: async (req, res) => {
-    let bug = await repository.GetBugByID(req.body.bugID);
-    bug.status = req.body.status;
-    repository.UpdateBug(bug);
-  },
-
   get_bug_view_component: async (req, res) => {
     bugs = await repository.GetAllBugs();
     res.render('/Components/anotherComponent/renderBugComponent',

@@ -12,17 +12,17 @@
     //   return tags;
     // }
 
-    // let bugColour = (bug) => {
-    //   if (bug.status === 'Created') {
-    //     return 'danger';
-    //   }
-    //   if (bug.status === 'In-Progress') {
-    //     return 'warning';
-    //   }
-    //   if (bug.status === 'Fixed') {
-    //     return 'success';
-    //   }
-    // }
+    let bugColour = (bug) => {
+      if (bug.status === 'Created') {
+        return 'danger';
+      }
+      if (bug.status === 'In-Progress') {
+        return 'warning';
+      }
+      if (bug.status === 'Fixed') {
+        return 'success';
+      }
+    }
 
     let editClick = async (bugId) => {
       console.log('We Got HERE!!');
@@ -38,10 +38,14 @@
       let bug = await result.json();
       let modalContainer = document.getElementById('modalContainer');
       
-      if(modalContainer.childElementCount <= 0) {
-        let modalComponent = document.createElement('bug-modal-component');
-        modalComponent.bug = bug;
-        modalContainer.innerHTML = modalComponent.shadowRoot.firstElementChild.outerHTML;
+      
+      let modalComponent = document.createElement('bug-modal-component');
+      modalComponent.bug = bug;
+      modalContainer.innerHTML = modalComponent.shadowRoot.firstElementChild.outerHTML;
+
+      let backdrop = document.getElementsByClassName('modal-backdrop')[0];
+      if(backdrop) {
+        backdrop.remove();
       }
       showBugModal();
       // modalComponent.shadowRoot.firstElementChild.outerHTML;
@@ -103,13 +107,17 @@
     }
 
     let bugStatusUpdater = async (bugID, status) => {
+      console.log('IDDD'+bugID);
       console.log(status);
-      let result = await fetch('/bugs/updateStatus', {
+      let updateObject = {
+        status: status
+      }
+      let result = await fetch('/bugs/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          bugID: bugID,
-          status: status
+          id: bugID,
+          updateObject
         })
       });
     }
@@ -236,7 +244,6 @@
   }
 
   async function descFocusOut(elementID) {
-    console.log("HERE?");
     let desc = document.getElementById(elementID);
     updateDescription();
     desc.classList.remove('form-control');
@@ -272,7 +279,6 @@
         updateObject: updateObject
       })
     })
-    console.log("ARE WE STUCK?");
     loadBugs();
     editClick(bugId);
   }
