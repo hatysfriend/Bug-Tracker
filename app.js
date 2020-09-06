@@ -31,7 +31,7 @@ app.use(flash());
 app.use(chroma);
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/components', express.static(__dirname + '/src/views/components'));
+app.use('/components', express.static(__dirname + '/components'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/dragula', express.static(__dirname + '/node_modules/dragula/dist'));

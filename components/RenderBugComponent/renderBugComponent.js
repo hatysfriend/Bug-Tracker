@@ -31,7 +31,7 @@ fetch("/components/RenderBugComponent/renderBugComponent.html")
                     listItem[0].setAttribute('bugid', bug._id);
                     container.querySelector('#editButton').setAttribute('id', bug._id);
                     container.querySelector('#bugCardTitle').innerHTML = bug.name;
-                    container.querySelector('#commentCounter').innerHTML = bug.comments.length;
+                    container.querySelector('#commentCounter').innerHTML = '  '+ bug.comments.length;
                     container.querySelector('#tagSection').innerHTML = this.tags(bug);
                 }
 
