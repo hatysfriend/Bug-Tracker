@@ -27,7 +27,13 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                 initializeTemplate(bug) {
                     let container = this.shadowDom.getElementById('addBugModal');
                     container.querySelector('#bugId').setAttribute('value', bug._id);
-                    container.querySelector('#name').innerHTML = bug.name;
+
+                    let name = container.querySelector('#name');
+                    name.innerHTML = bug.name;
+                    name.addEventListener('click', (e) => {
+                        console.log("GET FUCKED I DI IT CUNT !");
+                    })
+                    
                     container.querySelector('#status').innerHTML = '<span class="fas fa-bug text-' + this.bugColour(bug) + ' mr-2"></span>' + bug.status;
                     container.querySelector('#description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";
                     container.querySelector('#modalTagList').innerHTML = this.tags(bug);

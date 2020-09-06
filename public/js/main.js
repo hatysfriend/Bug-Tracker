@@ -21,7 +21,8 @@ let editClick = async (bugId) => {
     let modalContainer = document.getElementById("modalContainer");
     let modalComponent = document.createElement("bug-modal-component");
     modalComponent.bug = bug;
-    modalContainer.innerHTML = modalComponent.shadowRoot.firstElementChild.outerHTML;
+    modalContainer.textContent = '';
+    modalContainer.appendChild(modalComponent.shadowRoot.firstElementChild);
 
     //Force Close The Modal Backdrop If It Is Still There
     let backdrop = document.getElementsByClassName("modal-backdrop")[0];
@@ -46,32 +47,40 @@ let loadBugs = async () => {
   json.forEach((bug) => {
     console.log(bug);
     if (bug.status === "Created") {
-      created.innerHTML += InitializeTemplate(bug);
+      created.appendChild(InitializeTemplate(bug));
     }
     if (bug.status === "In-Progress") {
-      inProgress.innerHTML += InitializeTemplate(bug);
+      inProgress.appendChild(InitializeTemplate(bug));
     }
     if (bug.status === "Fixed") {
-      fixed.innerHTML += InitializeTemplate(bug);
+      fixed.appendChild(InitializeTemplate(bug));
     }
   });
 
   function InitializeTemplate(bug) {
     let button = document.createElement("render-bug-component");
     button.bug = bug;
-    return button.shadowRoot.firstElementChild.outerHTML;
+    return button.shadowRoot.firstElementChild;
   }
 
-  document.getElementById("addButtonContainerCreated").innerHTML = getButtonTemplate("Created");
-  document.getElementById("addButtonContainerIn-Progress").innerHTML = getButtonTemplate("In-Progress");
-  document.getElementById("addButtonContainerFixed").innerHTML = getButtonTemplate("Fixed");
+  let addButtonCreatedNode = document.getElementById("addButtonContainerCreated");
+  let addButtonInProgressNode = document.getElementById("addButtonContainerIn-Progress");
+  let addButtonFixedNode = document.getElementById("addButtonContainerFixed");
+
+  addButtonCreatedNode.innerHTML = null;
+  addButtonInProgressNode.innerHTML = null;
+  addButtonFixedNode.innerHTML = null;
+
+  addButtonCreatedNode.appendChild(getButtonTemplate("Created"));
+  addButtonInProgressNode.appendChild(getButtonTemplate("In-Progress"));
+  addButtonFixedNode.appendChild(getButtonTemplate("Fixed"));
 };
 
 function getButtonTemplate(status) {
   let button = document.createElement("bug-new-button");
   let shadowButton = button.shadowRoot.firstElementChild;
   shadowButton.setAttribute("status", status);
-  return shadowButton.outerHTML;
+  return shadowButton;
 }
 
 let bugStatusUpdater = async (bugID, status) => {
