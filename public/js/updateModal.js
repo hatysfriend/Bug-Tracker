@@ -17,21 +17,21 @@
     editClick(bugId);
   }
 
-  async function descClick(elementID) {
-    let desc = document.getElementById(elementID);
-    desc.classList.add('form-control');
-    desc.setAttribute('onclick', 'null');
-    desc.setAttribute('contenteditable', true);
-    desc.focus();
-  }
+  // async function descClick(elementID) {
+  //   let desc = document.getElementById(elementID);
+  //   desc.classList.add('form-control');
+  //   desc.setAttribute('onclick', 'null');
+  //   desc.setAttribute('contenteditable', true);
+  //   desc.focus();
+  // }
 
-  async function descFocusOut(elementID) {
-    let desc = document.getElementById(elementID);
-    updateDescription();
-    desc.classList.remove('form-control');
-    desc.setAttribute('onclick', 'descClick(\'' + elementID + '\')');
-    desc.setAttribute('contenteditable', false);
-  }
+  // async function descFocusOut(elementID) {
+  //   let desc = document.getElementById(elementID);
+  //   updateDescription();
+  //   desc.classList.remove('form-control');
+  //   desc.setAttribute('onclick', 'descClick(\'' + elementID + '\')');
+  //   desc.setAttribute('contenteditable', false);
+  // }
 
   async function updateDescription() {
     let desc = document.getElementById('description').innerHTML;

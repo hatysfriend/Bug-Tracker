@@ -31,17 +31,44 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     let name = container.querySelector('#name');
                     name.innerHTML = bug.name;
                     name.addEventListener('click', (e) => {
-                        console.log("GET FUCKED I DI IT CUNT !");
-                    })
+                        this.descClick(name);
+                    });
+
+                    name.addEventListener('blur', (e) => {
+                        this.descFocusOut(name);
+                    });
                     
                     container.querySelector('#status').innerHTML = '<span class="fas fa-bug text-' + this.bugColour(bug) + ' mr-2"></span>' + bug.status;
-                    container.querySelector('#description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";
+
+                    let desc = container.querySelector('#description');
+                    desc.innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";
+                    desc.addEventListener('click', (e) => {
+                        this.descClick(desc);
+                    });
+
+                    desc.addEventListener('blur', (e) => {
+                        this.descFocusOut(desc);
+                    });
+
                     container.querySelector('#modalTagList').innerHTML = this.tags(bug);
                     container.querySelector('#author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
                     container.querySelector('#prevTitle').value = bug.name;
     
                     let date = new Date(bug.date).toLocaleDateString();
                     container.querySelector('#date').innerHTML = date;
+                }
+
+                descClick(element) {
+                    element.classList.add('form-control');
+                    element.setAttribute('onclick', 'null');
+                    element.setAttribute('contenteditable', true);
+                    element.focus();
+                }
+                
+                descFocusOut(element) {
+                    updateDescription();
+                    element.classList.remove('form-control');
+                    element.setAttribute('contenteditable', false);
                 }
     
                 bugColour = (bug) => {
