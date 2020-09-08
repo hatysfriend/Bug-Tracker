@@ -11,6 +11,10 @@ fetch("/components/AddBugFormComponent/addBugComponent.html").then((response) =>
           html.getElementById("addBugTemplate").content.cloneNode(true)
         );
       }
+
+      connectedCallback() {
+        console.log("Add Bug Connected");
+      }
     }
     customElements.define("bug-new-button", AddBugComponent);
   });

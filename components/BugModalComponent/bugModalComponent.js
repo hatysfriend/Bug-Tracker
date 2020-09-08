@@ -22,45 +22,43 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     console.log(html);
                     shadowRoot.appendChild(html.getElementById('bugModalTemplate').content.cloneNode(true));
                     this.shadowDom = shadowRoot;
+                    this.container = this.shadowDom.getElementById('addBugModal');
                 }
-    
-                initializeTemplate(bug) {
-                    let container = this.shadowDom.getElementById('addBugModal');
-                    container.querySelector('#bugId').setAttribute('value', bug._id);
 
-                    let name = container.querySelector('#name');
-                    name.innerHTML = bug.name;
+                setEventListeners() {
+                    let name = this.container.querySelector('#name');
                     name.addEventListener('click', (e) => {
                         this.descClick(name);
                     });
-
                     name.addEventListener('blur', (e) => {
                         this.descFocusOut(name);
                     });
-                    
-                    container.querySelector('#status').innerHTML = '<span class="fas fa-bug text-' + this.bugColour(bug) + ' mr-2"></span>' + bug.status;
 
-                    let desc = container.querySelector('#description');
-                    desc.innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";
+                    let desc = this.container.querySelector('#description');
                     desc.addEventListener('click', (e) => {
                         this.descClick(desc);
                     });
-
                     desc.addEventListener('blur', (e) => {
                         this.descFocusOut(desc);
                     });
-
-                    container.querySelector('#modalTagList').innerHTML = this.tags(bug);
-                    container.querySelector('#author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
-                    container.querySelector('#prevTitle').value = bug.name;
+                }
+    
+                initializeTemplate(bug) {
+                    this.container.querySelector('#bugId').setAttribute('value', bug._id);
+                    this.container.querySelector('#name').innerHTML = bug.name;               
+                    this.container.querySelector('#status').innerHTML = '<span class="fas fa-bug text-' + this.bugColour(bug) + ' mr-2"></span>' + bug.status;
+                    this.container.querySelector('#description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";               
+                    this.container.querySelector('#modalTagList').innerHTML = this.tags(bug);
+                    this.container.querySelector('#author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
+                    this.container.querySelector('#prevTitle').value = bug.name;
     
                     let date = new Date(bug.date).toLocaleDateString();
-                    container.querySelector('#date').innerHTML = date;
+                    this.container.querySelector('#date').innerHTML = date;
+                    this.setEventListeners();
                 }
 
                 descClick(element) {
                     element.classList.add('form-control');
-                    element.setAttribute('onclick', 'null');
                     element.setAttribute('contenteditable', true);
                     element.focus();
                 }

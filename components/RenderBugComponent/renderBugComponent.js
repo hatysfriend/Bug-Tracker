@@ -24,6 +24,10 @@ fetch("/components/RenderBugComponent/renderBugComponent.html")
                     this.shadowDom = shadowRoot;
                 }
 
+                connectedCallback() {
+                    console.log("Render Bug Connected!");
+                }
+
                 initializeTemplate (bug) {
                     let container = this.shadowDom.getElementById('bugCardContent');
                     container.setAttribute('bugid', bug._id);

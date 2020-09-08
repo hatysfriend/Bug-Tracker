@@ -1,15 +1,3 @@
-let bugColour = (bug) => {
-  if (bug.status === "Created") {
-    return "danger";
-  }
-  if (bug.status === "In-Progress") {
-    return "warning";
-  }
-  if (bug.status === "Fixed") {
-    return "success";
-  }
-};
-
 function showBugModal() {
     $('#addBugModal').modal('show');
 }
@@ -102,4 +90,5 @@ let initialize = () => {
   loadBugs();
   dragger();
 };
+
 window.onload = initialize;
