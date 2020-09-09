@@ -1,8 +1,10 @@
 const express = require("express");
 const bugController = require('../controllers/bugController');
 const testController = require('../controllers/testBugController');
+const authHelpers = require('../authentication/authHelper');
 
 let router = express.Router();
+router.use(authHelpers.loginRedirect);
 
 router.get("/", bugController.get_all_bugs);
 router.get('/getBugsJson', bugController.get_all_bugs_json);

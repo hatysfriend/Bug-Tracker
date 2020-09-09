@@ -1,0 +1,20 @@
+<%- include('templates/generalHeader'); -%>
+
+<body>
+    <%- include('templates/scriptsection'); -%>
+    <image id="logo" src="/transparentBug.png"></image>
+    <form method="POST" action="/auth/login">
+        <div class="account-form">
+            <h3 class="account-title"><strong>Log in to Bugtrace</strong></h3>
+            <div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="Enter username"/>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Enter password"/>
+            </div>
+
+            <input type="submit" value="Login" class="btn btn-block btn-success" />
+        </div>
+    </form>
+</body>

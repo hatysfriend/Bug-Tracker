@@ -40,9 +40,10 @@ app.get('/', (req, res) => {
   res.redirect('/bugs');
 });
 
+app.use('/auth', authRouter);
 app.use('/bugs', bugRouter);
 app.use('/comments', commentRouter);
-app.use('/auth', authRouter);
+
 
 app.get("/error", (req, res) => {
   res.render("error");

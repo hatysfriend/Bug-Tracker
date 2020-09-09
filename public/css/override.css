@@ -25,3 +25,26 @@
    height:max-content;
 }
 
+.account-form {
+   display: block;
+   max-width: 585px;
+   margin: 0 auto;
+   position: relative;
+   background-color: #383838;
+   border-radius: 3px;
+   padding: 25px 40px;
+   box-shadow: rgba(255, 255, 255, 0.1) 0 0 10px;
+}
+
+.account-title {
+   text-align: center;
+   color: azure;
+   padding-bottom: 1rem;
+}
+
+#logo {
+   max-width: 250px;
+   margin-right: auto;
+   margin-left: auto;
+   display: block;
+}

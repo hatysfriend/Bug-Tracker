@@ -21,8 +21,19 @@ function loginRequired(req, res, next) {
     return next();
 }
 
+function loginRedirect(req, res, next) {
+    if(!req.user) {
+        res.redirect('/auth/login');
+    }
+    else {
+        return next();
+    }
+    
+}
+
 module.exports = {
     loginRequired,
     comparePassword,
-    createEncryptedUser
+    createEncryptedUser,
+    loginRedirect
 };

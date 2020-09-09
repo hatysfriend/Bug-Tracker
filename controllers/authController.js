@@ -3,14 +3,22 @@ const authHelper = require('../authentication/authHelper');
 const passport = require('../authentication/local');
 
 module.exports = {
-    register_a_user: async (req, res, next) => {
+
+    register_a_user_get: async (req, res) => {
+        res.render('register');
+    },
+
+    register_a_user_post: async (req, res, next) => {
         let user = await authHelper.createEncryptedUser(req.body.username, req.body.password);
         repo.InsertUser(user)
             .then((response) => {
-                passport.authenticate('local', (err, userReturn, info) => {
+                passport.authenticate('local', (err, userReturn, info) => {                   
                     if(userReturn) {
-                        //res.redirect('/index');
+                        console.log("USER IS LOGGED IN AFTER REG");
                         handleResponse(res, 200, 'success');
+                    }
+                    else if(err) {
+                        console.log(err);
                     }
                 })(req, res, next);
             })
@@ -19,7 +27,12 @@ module.exports = {
                 //res.redirect('/error');
             });
     },
-    login_a_user: (req, res, next) => {
+
+    login_a_user_get: (req, res) => {
+        res.render('login');
+    },
+
+    login_a_user_post: (req, res, next) => {
         passport.authenticate('local', (err, userReturn, info) => {
             if(err) {
                 handleResponse(res, 500, 'error');
@@ -33,12 +46,13 @@ module.exports = {
                         handleResponse(res, 500, 'error');
                     }
                     else{
-                        handleResponse(res, 200, 'success');
+                        res.redirect('/');
                     }
                 })
             }
         })(req, res, next);
     },
+    
     logout_a_user: (req, res, next) => {
         req.logout();
         handleResponse(res, 200, 'success');
