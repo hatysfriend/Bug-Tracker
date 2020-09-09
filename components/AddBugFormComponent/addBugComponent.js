@@ -56,16 +56,17 @@ fetch("/components/AddBugFormComponent/addBugComponent.html").then((response) =>
         setTimeout(1000);
         console.log(this.getElementsByTagName('textarea'));
         let title = this.container.querySelector('#addBugFormTextarea').value;
-        console.log("this is the INNWERL: " +element.value);
+        let status = this.container.getAttribute('status');
         let author = "Michael Richards";
-        console.log("DID WE GET HERE?");
         AddBug(
           {
             name: title,
             author: author,
-            status: 'Created'
+            status: status,
           } 
          )
+         
+         loadBugs();
         return;
         
       }

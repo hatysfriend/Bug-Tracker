@@ -21,6 +21,7 @@ let bugSchema = new mongoose.Schema({
   tags: [tagSchema],
   date: { type: Date, default: Date.now() },
   comments: [commentSchema],
+  archived: {type: Boolean,  default: false }
 });
 
 module.exports = mongoose.model("bugs", bugSchema);

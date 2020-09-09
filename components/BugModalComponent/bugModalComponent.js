@@ -41,17 +41,23 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     desc.addEventListener('blur', (e) => {
                         this.descFocusOut(desc);
                     });
+
+                    let archiveButton = this.container.querySelector('#archive');
+                    archiveButton.addEventListener('click', (e) => {
+                        console.log("DID WE GET HERE?");
+                        UpdateBug(this.bug._id, {archived: true});
+                        loadBugs();
+                    })
                 }
     
                 initializeTemplate(bug) {
                     this.container.querySelector('#bugId').setAttribute('value', bug._id);
                     this.container.querySelector('#name').innerHTML = bug.name;               
                     this.container.querySelector('#status').innerHTML = '<span class="fas fa-bug text-' + this.bugColour(bug) + ' mr-2"></span>' + bug.status;
-                    this.container.querySelector('#description').innerHTML = bug.description.length > 0 ? bug.description : "Enter Description Here...";               
+                    this.container.querySelector('#description').innerHTML = bug.description?.length > 0 ? bug.description : "Enter Description Here...";               
                     this.container.querySelector('#modalTagList').innerHTML = this.tags(bug);
                     this.container.querySelector('#author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
                     this.container.querySelector('#prevTitle').value = bug.name;
-    
                     let date = new Date(bug.date).toLocaleDateString();
                     this.container.querySelector('#date').innerHTML = date;
                     this.setEventListeners();

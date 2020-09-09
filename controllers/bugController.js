@@ -47,10 +47,10 @@ module.exports = {
     repository
       .InsertSingleBug(bug)
       .then(() => {
-        res.redirect("/");
+        res.send("OK");
       })
       .catch((err) => {
-        res.render("error");
+        res.send("error");
       });
   },
 

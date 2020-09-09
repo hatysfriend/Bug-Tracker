@@ -12,7 +12,7 @@ module.exports = {
                 {name:"Link",colour:"info"}
             ],
             date: "06/01/2020",
-            comments: comments.initialComments
+            comments: comments.initialComments,
         },
         {
             name: "Home page button",
@@ -50,7 +50,8 @@ module.exports = {
                 {name: "Mongoose", colour: "danger"}, 
                 {name: "Container", colour: "info"}
             ],
-            date: "03/07/2020"
+            date: "03/07/2020",
+            archived: true
         }
      ]
 };

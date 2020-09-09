@@ -21,7 +21,7 @@ module.exports = (() => {
   }
 
   async function _getAllBugs() {
-    return await BugObject.find()
+    return await BugObject.find({archived: false})
   }
 
   async function _deleteCollection() {
