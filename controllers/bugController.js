@@ -42,16 +42,8 @@ module.exports = {
   },
 
   create_bug_post: async (req, res) => {
-    console.log(req.body);
-    bug = {
-      name: req.body.name,
-      author: req.body.author,
-      status: req.body.status,
-      description: req.body.description,
-      tags: req.body.tags,
-      date: req.body.date,
-      comments: [],
-    };
+    let bug = req.body.bug;
+    console.log(bug);
     repository
       .InsertSingleBug(bug)
       .then(() => {

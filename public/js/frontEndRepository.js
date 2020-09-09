@@ -9,6 +9,16 @@ async function AddTag(bugId, tag) {
   });
 }
 
+async function AddBug(bug) {
+  return await fetch('/bugs/addbug', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bug: bug
+    })
+  });
+}
+
 async function UpdateBug(bugId, updateObject) {
   return await fetch("/bugs/update", {
     method: "POST",
@@ -21,7 +31,6 @@ async function UpdateBug(bugId, updateObject) {
 }
 
 async function GetAllBugs() {
-  console.log("Anything?");
   let bugs = await fetch("/bugs/getBugsJson");
   return await bugs.json();
 }

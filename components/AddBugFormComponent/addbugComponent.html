@@ -1,19 +1,18 @@
 <!--TEMPLATES-->
-<div id="templates" hidden>
+
     <template id="addBugTemplate">
       <div id="addBugContents">
-        <input onclick="addCardMini(this)" type="button" id="buttonTemplate" class="btn btn-block btn-info" value="+ Add Another Card"/>
+        <input type="button" id="addNewBugButton" class="btn btn-block btn-info" value="+ Add Another Card"/>
         <div id="addBugFormTemplate" hidden>
-          <textarea id="addNewBugTemplate" onfocusout="addCardMini(this)" class="form-control">Add a title here...</textarea><br>
-          <button class="btn btn-success" type="button" onclick="addCardMini(this)">
+          <textarea id="addBugFormTextarea" class="form-control" placeholder="Add a title here..." value=""></textarea><br>
+          <button id="addBugFormButton" class="btn btn-success" type="button">
             <span class="fa fa-plus mr-1"></span>Add Bug
           </button>
-          <href class="close" onclick="addCardMini(this)" style="cursor: pointer;">
+          <href id="addBugFormClose" class="close" style="cursor: pointer;">
             <span class="fas fa-times-circle" aria-hidden="true"></span>
           </href>
         </div>
       </div>
     </template>
-  </div>
   
   

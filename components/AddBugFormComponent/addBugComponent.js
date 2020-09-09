@@ -10,12 +10,67 @@ fetch("/components/AddBugFormComponent/addBugComponent.html").then((response) =>
         shadowRoot.appendChild(
           html.getElementById("addBugTemplate").content.cloneNode(true)
         );
+        this.container = shadowRoot.getElementById("addBugContents");
+        this.setEventListeners();
       }
 
-      connectedCallback() {
-        console.log("Add Bug Connected");
+      setEventListeners() {
+        let addNewBugButton = this.container.querySelector('#addNewBugButton');
+        addNewBugButton.addEventListener('click', (e) => {          
+            this.toggleAddBugComponent(addNewBugButton);
+        });
+
+        let addBugFormTextarea = this.container.querySelector('#addBugFormTextarea');
+        addBugFormTextarea.addEventListener('blur', (e) => {
+            
+            this.addBug(addBugFormTextarea);
+            this.toggleAddBugComponent(addBugFormTextarea);
+        });
+
+        let addBugFormButton = this.container.querySelector('#addBugFormButton');
+        addBugFormButton.addEventListener('click', (e) => {
+            this.addBug();
+            this.toggleAddBugComponent(addBugFormButton);
+        });
+
+        let addBugFormClose = this.container.querySelector('#addBugFormClose');
+        addBugFormClose.addEventListener('click', (e) => {
+            this.toggleAddBugComponent(addBugFormClose);
+        });
+      }
+
+      toggleAddBugComponent(element) {
+        let formTemplate = this.container.querySelector('#addBugFormTemplate');
+        let addNewBugButton = this.container.querySelector('#addNewBugButton');
+        addNewBugButton.toggleAttribute('hidden');
+        formTemplate.toggleAttribute('hidden');
+    
+        if(element.classList.contains('close')) {
+          console.log('Closing');
+          return;
+        }
+        console.log("We Called Add Card Mini With The Status: "+this.container.getAttribute('status'));
+      }
+
+        addBug(element) {
+        setTimeout(1000);
+        console.log(this.getElementsByTagName('textarea'));
+        let title = this.container.querySelector('#addBugFormTextarea').value;
+        console.log("this is the INNWERL: " +element.value);
+        let author = "Michael Richards";
+        console.log("DID WE GET HERE?");
+        AddBug(
+          {
+            name: title,
+            author: author,
+            status: 'Created'
+          } 
+         )
+        return;
+        
       }
     }
     customElements.define("bug-new-button", AddBugComponent);
   });
 });
+//Nice Component Thomas - Well Done A+

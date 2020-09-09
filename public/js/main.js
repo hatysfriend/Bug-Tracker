@@ -33,7 +33,6 @@ let loadBugs = async () => {
   fixed.innerHTML = null;
 
   json.forEach((bug) => {
-    console.log(bug);
     if (bug.status === "Created") {
       created.appendChild(InitializeTemplate(bug));
     }

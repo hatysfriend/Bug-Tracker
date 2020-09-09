@@ -9,6 +9,7 @@ module.exports = (() => {
   }
 
   async function _insertSingleBug(bug) {
+    console.log('REPO SHEEMPEEP');
     let bugModel = new BugObject(bug);
     return await bugModel.save();
   }
