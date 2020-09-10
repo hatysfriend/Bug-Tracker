@@ -14,8 +14,16 @@ module.exports = {
             .then((response) => {
                 passport.authenticate('local', (err, userReturn, info) => {                   
                     if(userReturn) {
-                        console.log("USER IS LOGGED IN AFTER REG");
-                        handleResponse(res, 200, 'success');
+                        req.logIn(userReturn, (err) => {
+                            if(err) {
+                                handleResponse(res, 500, 'error');
+                            }
+                            else{
+                                console.log(`Is ${userReturn.name} authenicated: ` + req.isAuthenticated());
+                                res.redirect('/');
+                            }
+                        })
+                        //handleResponse(res, 200, 'success');
                     }
                     else if(err) {
                         console.log(err);
@@ -46,6 +54,7 @@ module.exports = {
                         handleResponse(res, 500, 'error');
                     }
                     else{
+                        console.log(`Is ${userReturn.name} authenicated: ` + req.isAuthenticated());
                         res.redirect('/');
                     }
                 })
