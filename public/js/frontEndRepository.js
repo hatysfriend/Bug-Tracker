@@ -45,3 +45,9 @@ async function GetBugById(bugId) {
   });
   return await result.json();
 }
+
+async function GetUserName() {
+  let result = await fetch("/auth/getusername");
+  console.log("THIS IS THE RESULT: " + result);
+  return await result.text();
+}

@@ -10,5 +10,6 @@ router.post('/register', authController.register_a_user_post);
 router.get('/login', authController.login_a_user_get);
 router.post('/login', authController.login_a_user_post);
 router.get('/logout', authHelpers.loginRequired, authController.logout_a_user);
+router.get('/getusername', authController.get_username);
 
 module.exports = router;

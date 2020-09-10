@@ -2,6 +2,11 @@ function showBugModal() {
     $('#addBugModal').modal('show');
 }
 
+function CreateUserStatus() {
+  let userStatus = document.createElement('user-status');
+  document.getElementById('userStatusContainer').appendChild(userStatus);
+}
+
 let editClick = async (bugId) => {
   let bug = await GetBugById(bugId);
 
@@ -88,6 +93,7 @@ let dragger = () => {
 let initialize = () => {
   loadBugs();
   dragger();
+  CreateUserStatus();
 };
 
 window.onload = initialize;

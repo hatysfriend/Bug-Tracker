@@ -3,9 +3,17 @@ const authHelper = require('../authentication/authHelper');
 const passport = require('../authentication/local');
 
 module.exports = {
-
     register_a_user_get: async (req, res) => {
         res.render('register');
+    },
+
+    get_username: async (req, res) => {
+        if(!req.user) {
+            res.send("Dud");
+        }
+        else {
+            res.send(req.user.username);
+        }
     },
 
     register_a_user_post: async (req, res, next) => {
@@ -19,7 +27,7 @@ module.exports = {
                                 handleResponse(res, 500, 'error');
                             }
                             else{
-                                console.log(`Is ${userReturn.name} authenicated: ` + req.isAuthenticated());
+                                console.log(`Is ${userReturn} authenicated: ` + req.isAuthenticated());
                                 res.redirect('/');
                             }
                         })
@@ -54,7 +62,7 @@ module.exports = {
                         handleResponse(res, 500, 'error');
                     }
                     else{
-                        console.log(`Is ${userReturn.name} authenicated: ` + req.isAuthenticated());
+                        console.log(`Is ${userReturn.username} authenicated: ` + req.isAuthenticated());
                         res.redirect('/');
                     }
                 })
