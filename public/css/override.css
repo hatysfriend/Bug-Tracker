@@ -31,9 +31,9 @@
    margin: 0 auto;
    position: relative;
    background-color: #383838;
-   border-radius: 3px;
+   border-radius: 15px;
    padding: 25px 40px;
-   box-shadow: rgba(255, 255, 255, 0.1) 0 0 10px;
+   box-shadow: rgba(255, 255, 255, 0.1) 0 0 2px;
 }
 
 .account-title {
@@ -47,4 +47,13 @@
    margin-right: auto;
    margin-left: auto;
    display: block;
+}
+
+#custom-alert {
+   max-width: 585px;
+   margin-right: auto;
+   margin-left: auto;
+   display: block;
+   position: relative;
+   margin-top: 15px;
 }

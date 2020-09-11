@@ -3,6 +3,7 @@ const authHelper = require('../authentication/authHelper');
 const passport = require('../authentication/local');
 
 module.exports = {
+
     register_a_user_get: async (req, res) => {
         res.render('register');
     },
@@ -22,16 +23,7 @@ module.exports = {
             .then((response) => {
                 passport.authenticate('local', (err, userReturn, info) => {                   
                     if(userReturn) {
-                        req.logIn(userReturn, (err) => {
-                            if(err) {
-                                handleResponse(res, 500, 'error');
-                            }
-                            else{
-                                console.log(`Is ${userReturn} authenicated: ` + req.isAuthenticated());
-                                res.redirect('/');
-                            }
-                        })
-                        //handleResponse(res, 200, 'success');
+                        login(userReturn, req, res);
                     }
                     else if(err) {
                         console.log(err);
@@ -39,43 +31,46 @@ module.exports = {
                 })(req, res, next);
             })
             .catch((err) => {
-                handleResponse(res, 500, 'error');
-                //res.redirect('/error');
+                res.redirect('/error');
             });
     },
 
     login_a_user_get: (req, res) => {
-        res.render('login');
+        res.render('login', {error: req.flash("error")});
     },
 
     login_a_user_post: (req, res, next) => {
         passport.authenticate('local', (err, userReturn, info) => {
             if(err) {
-                handleResponse(res, 500, 'error');
+                req.flash('error', 'Login Failed. Mysterious...');  
+                res.redirect('/auth/login');
             }
             if(!userReturn) {
-                handleResponse(res, 404, 'User not found');
+                req.flash('error', 'Login Failed. User not found');
+                res.redirect('/auth/login');
             }
             if(userReturn) {
-                req.logIn(userReturn, (err) => {
-                    if(err) {
-                        handleResponse(res, 500, 'error');
-                    }
-                    else{
-                        console.log(`Is ${userReturn.username} authenicated: ` + req.isAuthenticated());
-                        res.redirect('/');
-                    }
-                })
+                login(userReturn, req, res);
             }
         })(req, res, next);
     },
     
     logout_a_user: (req, res, next) => {
         req.logout();
-        handleResponse(res, 200, 'success');
+        res.redirect('/');
     }
 };
 
-function handleResponse(res, code, statusMsg) {
-    res.status(code).json({status: statusMsg});
+
+function login(userReturn, req, res) {
+    req.logIn(userReturn, (err) => {
+        if(err) {  
+            
+        }
+        else{
+            req.flash("success", "You are logged in, prepare to squash bugs.");
+            console.log(`Is ${userReturn} authenicated: ` + req.isAuthenticated());
+            res.redirect('/');
+        }
+    });
 }

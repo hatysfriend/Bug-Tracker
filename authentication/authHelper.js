@@ -27,12 +27,24 @@ function loginRedirect(req, res, next) {
     }
     else {
         return next();
-    }  
+    } 
 }
+
+function checkAlreadyAuthenticated(req, res, next) {
+    if(req.isAuthenticated()){
+        res.redirect('/');
+        //Add Flash To Telle Them They Are Stubid
+    }else{
+        next();
+    }
+}
+
+
 
 module.exports = {
     loginRequired,
     comparePassword,
     createEncryptedUser,
-    loginRedirect
+    loginRedirect,
+    checkAlreadyAuthenticated
 };

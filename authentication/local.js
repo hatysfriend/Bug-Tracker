@@ -3,11 +3,11 @@ const LocalStrategy = require('passport-local').Strategy;
 const repository = require('../data/authRepository');
 const authHelper = require('./authHelper');
 const init = require('./passport');
-const options = {};
+const options = {passReqToCallback: true};
 
 init();
 
-passport.use(new LocalStrategy(options, async (username, password, done) => {
+passport.use(new LocalStrategy(options, async (req, username, password, done) => {
     repository.GetUser({username: username})
         .then( async (user)=> {
             if(!user) {
@@ -15,6 +15,7 @@ passport.use(new LocalStrategy(options, async (username, password, done) => {
             }
             let result = await authHelper.comparePassword(password, user.password);
             if(!result) {
+                req.flash('error', 'Login Failed. Mysterious...'); 
                 return done(null, false);
             }
             else {

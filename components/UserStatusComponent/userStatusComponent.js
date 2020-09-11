@@ -4,10 +4,9 @@ class UserStatus extends HTMLElement {
         this.InitializeComponent();
     }
 
-    async InitializeComponent() {
+async InitializeComponent() {
         let name = await GetUserName();
         let html = 
-
         `<link rel="stylesheet" href="/css/custom.css">
         <div>
             <label id="username">${name}</label>

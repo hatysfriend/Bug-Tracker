@@ -2,6 +2,14 @@ function showBugModal() {
     $('#addBugModal').modal('show');
 }
 
+function flashDisplay() {
+  let flashComponent = document.getElementById('flashDisplay');
+  let flashMessage = flashComponent.getAttribute('flash');
+  if(flashMessage.length > 0) {
+    flashComponent.innerHTML = `<alert role="alert" class="alert alert-success">${flashMessage}</alert>`
+  }
+}
+
 function CreateUserStatus() {
   let userStatus = document.createElement('user-status');
   document.getElementById('userStatusContainer').appendChild(userStatus);
@@ -94,6 +102,7 @@ let initialize = () => {
   loadBugs();
   dragger();
   CreateUserStatus();
+  flashDisplay();
 };
 
 window.onload = initialize;

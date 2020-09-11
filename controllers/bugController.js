@@ -6,6 +6,7 @@ module.exports = {
     repository.GetAllBugs()
     .then((data) => {
       res.render("index", {
+        flash: req.flash("success") || "",
         title: "The Bug Tracker",
         subtitle: "Buggy Tracker",
         bugList: data,
