@@ -7,10 +7,11 @@ class UserStatus extends HTMLElement {
 async InitializeComponent() {
         let name = await GetUserName();
         let html = 
-        `<link rel="stylesheet" href="/css/custom.css">
+        `<link rel="stylesheet" href="/css/custom.css"/>
         <div>
-            <label id="username">${name}</label>
-            <a href="/auth/logout" class="btn btn-warning">Logout</a>
+            <span class="badge badge-pill badge-light mr-1"><strong>${name.charAt(0).toUpperCase()}</strong></span>
+            <label id="username">Hi ${name}!</label>
+            <a href="/auth/logout" class="badge badge-warning ml-2">Logout</a>
         </div>`;
 
         let shadowRoot = this.attachShadow({mode: 'open'});

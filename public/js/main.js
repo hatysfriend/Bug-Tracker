@@ -2,6 +2,10 @@ function showBugModal() {
     $('#addBugModal').modal('show');
 }
 
+function logoAnimation() {
+
+}
+
 function flashDisplay() {
   let flashComponent = document.getElementById('flashComponent');
   let flashMessage = flashComponent.getAttribute('flash');
@@ -9,7 +13,6 @@ function flashDisplay() {
     flashComponent.innerHTML = `<alert class="alert alert-success">${flashMessage}</alert>`
     $('#flashComponent').toast('show');
   }
-  
 }
 
 function CreateUserStatus() {
@@ -105,6 +108,7 @@ let initialize = () => {
   dragger();
   CreateUserStatus();
   flashDisplay();
+  logoAnimation();
 };
 
 window.onload = initialize;

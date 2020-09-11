@@ -1,7 +1,8 @@
 .container {
-   border-width: 20rem;
-   border:solid;
-   border-color: aqua; 
+   border: solid;
+   border-color: #383838;
+   background-color: #383838;
+   border-radius: 1%; 
    height:max-content;
    min-height:2rem;
 }
@@ -27,7 +28,7 @@
 
 .account-form {
    display: block;
-   max-width: 585px;
+   max-width: 27.2%;
    margin: 0 auto;
    position: relative;
    background-color: #383838;
@@ -74,4 +75,9 @@
 
 .navbar-brand {
    color: azure !important; 
+}
+
+.row {
+   margin-left: auto;
+   margin-right: auto;
 }
