@@ -26,6 +26,24 @@
    height:max-content;
 }
 
+.list-group-item {
+   background-color: rgb(66, 66, 66);
+   border-radius: 1% !important;
+}
+
+.card-custom-colour {
+   background-color: rgb(66, 66, 66);
+}
+
+.card {
+   border: none;
+   border-radius: 1% !important;
+}
+
+#bugCardTemplate {
+   border-radius: 10%; 
+}
+
 .account-form {
    display: block;
    max-width: 27.2%;
