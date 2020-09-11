@@ -10,6 +10,7 @@ const authRouter = require('./routes/auth-routes');
 const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
+const authHelper = require('./authentication/authHelper');
 let app = express();
 
 app.set("views", "./src/views");
@@ -36,7 +37,7 @@ app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist')
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/dragula', express.static(__dirname + '/node_modules/dragula/dist'));
 
-app.get('/', (req, res) => {
+app.get('/', authHelper.loginRedirect, (req, res) => {
   res.redirect('/bugs');
 });
 

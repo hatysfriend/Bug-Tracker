@@ -16,7 +16,7 @@ async function createEncryptedUser (username, password) {
 
 function loginRequired(req, res, next) {
     if(!req.user) {
-        return res.status(401).json({status: 'Please Login Mate!'});
+        return res.status(401).json({status: 'You need to be logged in to logout.  right?'});
     }
     return next();
 }

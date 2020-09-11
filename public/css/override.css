@@ -57,3 +57,21 @@
    position: relative;
    margin-top: 15px;
 }
+
+#flashComponent {
+   position: absolute;
+   left: 50%;
+   transform: translateX(-50%);
+   top: 1.5rem; 
+}
+
+/* navbar  bg-light */
+
+.bg-light, .navbar, .bg-light {
+   background-color: #383838 !important;
+   color: azure; 
+}
+
+.navbar-brand {
+   color: azure !important; 
+}

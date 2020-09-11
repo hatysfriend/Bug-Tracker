@@ -3,11 +3,13 @@ function showBugModal() {
 }
 
 function flashDisplay() {
-  let flashComponent = document.getElementById('flashDisplay');
+  let flashComponent = document.getElementById('flashComponent');
   let flashMessage = flashComponent.getAttribute('flash');
   if(flashMessage.length > 0) {
-    flashComponent.innerHTML = `<alert role="alert" class="alert alert-success">${flashMessage}</alert>`
+    flashComponent.innerHTML = `<alert class="alert alert-success">${flashMessage}</alert>`
+    $('#flashComponent').toast('show');
   }
+  
 }
 
 function CreateUserStatus() {

@@ -4,20 +4,27 @@
   <script src="/js/frontEndRepository.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/updateModal.js"></script>
-  
-  
-  <div class="row">
-    <div class="col-2">
-      <img id="logo" src="/transparentBug.png">
-    </div>
-    <div id="userStatusContainer" class="offset-11">
-    </div>
-  </div>
-  <div id="flashDisplay" class="row" flash="<%=flash%>">
-  </div>
-  
 
+  <nav class="navbar navbar-light bg-light">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="navbar-brand" href="#">
+          <img src="/transparentBugLogo.png" width="25" height="30" class="d-inline-block align-top" alt="">
+          Bugtrace
+        </a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <div id="userStatusContainer" class="form-inline">
+      </div>
+    </form>
+  </nav>
 
+  <div flash="<%=flash%>" id="flashComponent" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="3000">
+    
+  </div>
+  
+  
   <!--BUG CONTAINERS-->
   <div id="main">
     <div class="row">
