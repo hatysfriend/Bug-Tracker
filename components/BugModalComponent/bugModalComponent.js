@@ -23,6 +23,9 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     shadowRoot.appendChild(html.getElementById('bugModalTemplate').content.cloneNode(true));
                     this.shadowDom = shadowRoot;
                     this.container = this.shadowDom.getElementById('addBugModal');
+
+                    let commentEntry = document.createElement('comment-entry-component');
+                    this.container.querySelector('#commentEntryContainer').appendChild(commentEntry);
                 }
 
                 setEventListeners() {

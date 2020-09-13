@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/override.css">
+<template id="commentEntryTemplate">
+    <div class="form-group">
+        <label for="commentsEntry"><span class="fas fa-list-ul mr-1"></span> Comments </label><br>
+        <div id="commentsEntryDiv">
+            <textarea class="form-control" name="commentsEntry" id="commentTextArea" placeholder="Write a comment..."></textarea>
+            <button id="commentSaveButton" class="btn btn-success" disabled hidden>Save</button>
+            <br>
+        </div>
+
+    </div>
+</template>
+
+<template id="commentDisplayTemplate">
+    <div style="min-height:100px;" class="form-group">
+        <label for="commentsDisplay"><span class="fas fa-list-ul mr-1"></span> comments </label><br>
+        <div id="commentsDisplayDiv">
+            <span style="min-height:100px;" name="commentsDisplay" id="commentsDisplay" contenteditable="false"
+                class=""></span><br>
+        </div>
+    </div>
+</template>
