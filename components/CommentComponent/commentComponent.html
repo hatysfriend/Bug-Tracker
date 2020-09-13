@@ -1,10 +1,11 @@
-<link rel="stylesheet" href="/css/custom.css">
-<link rel="stylesheet" href="/css/override.css">
-<template id="commentEntryTemplate">
+ <template id="commentEntryTemplate">
+    <style>
+        @import url("/css/override.css");
+    </style> 
     <div class="form-group">
         <label for="commentsEntry"><span class="fas fa-list-ul mr-1"></span> Comments </label><br>
         <div id="commentsEntryDiv">
-            <textarea class="form-control" name="commentsEntry" id="commentTextArea" placeholder="Write a comment..."></textarea>
+            <textarea class="form-control" name="commentTextArea" id="commentTextArea" placeholder="Write a comment..."></textarea>
             <button id="commentSaveButton" class="btn btn-success" disabled hidden>Save</button>
             <br>
         </div>

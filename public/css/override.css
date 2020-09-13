@@ -99,3 +99,15 @@
    margin-left: auto;
    margin-right: auto;
 }
+
+#commentTextArea {
+   background: rgb(245, 148, 148) !important;
+   box-sizing: content-box;
+   box-shadow: none;
+   height: 20px;
+   margin: 0;
+   min-height: 20px;
+   padding: 0;
+   width: 100%;
+   resize: none;
+}
