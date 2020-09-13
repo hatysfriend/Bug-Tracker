@@ -5,4 +5,9 @@ let userSchema = new mongoose.Schema({
     password: {type: String, required:true}
   });
 
-  module.exports = mongoose.model('users', userSchema);
+   let userModel = mongoose.model('users', userSchema);
+
+module.exports = {
+  userSchema,
+  userModel
+}

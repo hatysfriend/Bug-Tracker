@@ -1,16 +1,17 @@
 module.exports = (() => {
-  const BugObject = require("./bugSchemas");
+  const bugObject = require("./bugSchemas");
   const database = require("./database");
+
+  let BugModel = bugObject.bugModel;
 
   database.GetDbInstance();
   
   async function _insertBugCollection(bugs) {
-    await BugObject.insertMany(bugs);
+    await BugModel.insertMany(bugs);
   }
 
   async function _insertSingleBug(bug) {
-    console.log('REPO SHEEMPEEP');
-    let bugModel = new BugObject(bug);
+    let bugModel = new BugModel(bug);
     return await bugModel.save();
   }
 
@@ -21,19 +22,19 @@ module.exports = (() => {
   }
 
   async function _getAllBugs() {
-    return await BugObject.find({archived: false})
+    return await BugModel.find({archived: false})
   }
 
   async function _deleteCollection() {
-    return await BugObject.deleteMany();
+    return await BugModel.deleteMany();
   }
 
   async function _getBugByID(id) {
-    return await BugObject.findById(id);
+    return await BugModel.findById(id);
   }
 
   async function _updateBug(query) {
-    return await BugObject.findByIdAndUpdate(query.id, {$set: query.updateObject}, {upsert: false, new: true}, null);
+    return await BugModel.findByIdAndUpdate(query.id, {$set: query.updateObject}, {upsert: false, new: true}, null);
   }
 
   return {

@@ -1,16 +1,11 @@
 const mongoose = require("mongoose");
+const comment = require('./commentSchemas');
+
+let commentSchema = comment.commentSchema;
 
 let tagSchema = new mongoose.Schema({
   name: { type: String, required: true },
   colour: { type: String, required: true }
-});
-
-let commentSchema = new mongoose.Schema({
-  id: Number,
-  name: { type: String, required: true },
-  title: { type: String, required: true },
-  body: { type: String, required: true },
-  date: { type: Date, default: Date.now() },
 });
 
 let bugSchema = new mongoose.Schema({
@@ -24,5 +19,11 @@ let bugSchema = new mongoose.Schema({
   archived: {type: Boolean,  default: false }
 });
 
-module.exports = mongoose.model("bugs", bugSchema);
+let bugModel = mongoose.model("bugs", bugSchema);
+
+module.exports = {
+  bugSchema,
+  bugModel
+}
+
 

@@ -44,7 +44,7 @@ fetch('components/BugModalComponent/bugModalComponent.html')
 
                     let archiveButton = this.container.querySelector('#archive');
                     archiveButton.addEventListener('click', (e) => {
-                        console.log("DID WE GET HERE?");
+                        $('#addBugModal').modal('hide');
                         UpdateBug(this.bug._id, {archived: true});
                         loadBugs();
                     })
