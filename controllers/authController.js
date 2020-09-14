@@ -65,11 +65,11 @@ module.exports = {
 function login(userReturn, req, res) {
     req.logIn(userReturn, (err) => {
         if(err) {  
-            
         }
         else{
+            res.status(200);
             req.flash("success", "You are logged in, prepare to squash bugs.");
-            console.log(`Is ${userReturn} authenicated: ` + req.isAuthenticated());
+            // console.log(`Is ${userReturn} authenicated: ` + req.isAuthenticated());
             res.redirect('/');
         }
     });

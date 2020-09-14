@@ -13,21 +13,20 @@ beforeEach(async () => {
 describe("Logout Tests ->", () => {
   it("should logout a user", (done) => {
     let agent = chai.request.agent(server);
-    agent.post("/auth/login")
-    .send({
-      username: 'charmander',
-      password: 'password',
-    })
-    .then(() => {
-      agent.get("/auth/logout")
-      .then((res) => {
-        res.redirects.length.should.eql(0);
-        res.status.should.eql(200);
-        res.type.should.eql("application/json");
-        res.body.status.should.eql("success");
-        done();
+    agent
+      .post("/auth/login")
+      .send({
+        username: "charmander",
+        password: "password",
+      })
+      .then(() => {
+        agent.get("/auth/logout").then((res) => {
+          res.redirects.length.should.eql(2);
+          res.status.should.eql(200);
+          res.type.should.eql("text/html");
+          done();
+        });
       });
-    });
   });
 
   it("Should throw error if a user is not logged in", (done) => {
@@ -38,7 +37,9 @@ describe("Logout Tests ->", () => {
         res.redirects.length.should.eql(0);
         res.status.should.eql(401);
         res.type.should.eql("application/json");
-        res.body.status.should.eql("Please Login Mate!");
+        res.body.status.should.eql(
+          "You need to be logged in to logout.  right?"
+        );
         done();
       });
   });
@@ -55,10 +56,9 @@ describe("Login Tests ->", () => {
       })
       .end((err, res) => {
         should.not.exist(err);
-        res.redirects.length.should.eql(0);
+        res.redirects.length.should.eql(2);
         res.status.should.eql(200);
-        res.type.should.eql("application/json");
-        res.body.status.should.eql("success");
+        res.type.should.eql("text/html");
         done();
       });
   });
@@ -67,16 +67,17 @@ describe("Login Tests ->", () => {
     chai
       .request(server)
       .post("/auth/login")
+      .redirects(0)
       .send({
         username: "not",
         password: "auser",
       })
       .end((err, res) => {
         should.not.exist(err);
+        res.header['location'].should.eql("/auth/login");
         res.redirects.length.should.eql(0);
-        res.status.should.eql(404);
-        res.type.should.eql("application/json");
-        res.body.status.should.eql("User not found");
+        res.status.should.eql(302);
+        res.type.should.eql("text/plain");
         done();
       });
   });
@@ -93,10 +94,9 @@ describe("Register Tests ->", () => {
       })
       .end((err, res) => {
         should.not.exist(err);
-        res.redirects.length.should.eql(0);
+        res.redirects.length.should.eql(2);
         res.status.should.eql(200);
-        res.type.should.eql("application/json");
-        res.body.status.should.eql("success");
+        res.type.should.eql("text/html");
         done();
       });
   });
