@@ -16,7 +16,7 @@ module.exports = (() => {
 
     async function _insertUser(user) {
         let userModel = new UserModel(user);
-        return await userModel.save()
+        return await userModel.save();
       }
     
     return {

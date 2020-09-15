@@ -7,7 +7,7 @@ module.exports = (() => {
     database.GetDbInstance();
 
     async function _getAllComments(bugId) {
-        let bug = await BugModel.findById(bugId);
+        let bug = await BugModel.findById(bugId).populate('comments.user');
         return bug.comments;
       }
 
@@ -20,7 +20,7 @@ module.exports = (() => {
     async function _insertComment(bugId, comment) {
         let bug = await BugModel.findById(bugId);
         bug.comments.push(comment);
-        return await BugModel.save();
+        return await bug.save();
       }
 
     async function _updateComment(bugId, comment) {
@@ -44,7 +44,7 @@ module.exports = (() => {
         DeleteCommentByID(bugId, commentId) {
             return _deleteCommentByID(bugId, commentId);
         },
-        InsertComment() {
+        InsertComment(bugId, comment) {
             return _insertComment(bugId, comment);
         },
         UpdateComment(bugId, comment) {

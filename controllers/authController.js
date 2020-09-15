@@ -13,6 +13,7 @@ module.exports = {
             res.send("Dud");
         }
         else {
+            console.log(req.user);
             res.send(req.user.username);
         }
     },
