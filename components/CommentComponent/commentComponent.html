@@ -1,5 +1,6 @@
  <template id="commentEntryTemplate">
     <style>
+        @import url("/css/custom.css");
         @import url("/css/override.css");
     </style> 
     <div class="form-group">
@@ -9,7 +10,6 @@
             <button id="commentSaveButton" class="btn btn-success" disabled hidden>Save</button>
             <br>
         </div>
-
     </div>
 </template>
 
@@ -17,7 +17,7 @@
     <div style="min-height:100px;" class="form-group">
         <label for="commentsDisplay"><span class="fas fa-list-ul mr-1"></span> comments </label><br>
         <div id="commentsDisplayDiv">
-            <span style="min-height:100px;" name="commentsDisplay" id="commentsDisplay" contenteditable="false"
+            <span style="min-height:100px;" name="commentsDisplay" id="commentsDisplay"
                 class=""></span><br>
         </div>
     </div>

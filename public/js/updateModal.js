@@ -18,8 +18,8 @@
   }
 
   async function updateDescription() {
-    let desc = document.getElementById('description').innerHTML;
-    let title = document.getElementById('name').innerHTML;
+    let desc = document.getElementById('description').textContent;
+    let title = document.getElementById('title').textContent;
     let bugId = document.getElementById('bugId').value;
     let prev = document.getElementById('prevTitle').value;
     

@@ -39,8 +39,7 @@ describe('COMMENT TESTS ->', () => {
         commentRepo.InsertComment(insertedBug._id, comment)
           .then((data) => {
             expect(data).to.not.equal(null);
-            expect(data.comments.length).to.be.equal(1);
-            let commentResult = data.comments[0];
+            let commentResult = data;
             expect(commentResult.comment).to.be.equal('This is a comment');
             expect(commentResult.user).to.be.equal(insertedUser._id);
             expect(commentResult.likes[0].user).to.be.equal(insertedUser._id);
@@ -89,5 +88,26 @@ describe('COMMENT TESTS ->', () => {
       });     
     });
   });
+
+  describe('Update Comment ->', () => {
+    it('Updates Comment Name With Bug', async (done) => {
+      let commentOne = {
+        comment: "This is comment one",
+        user: insertedUser._id,
+        likes: [{user: insertedUser._id}]
+      }
+
+      let insertedComment = await commentRepo.InsertComment(insertedBug._id, commentOne);
+      console.log('insertedComment'+ insertedComment._id);
+      
+      let update = { _id: insertedComment._id, comment: "The new comment" }
+      commentRepo.UpdateComment(insertedBug._id, update)
+        .then((data) => {
+          console.log(data);
+          expect(data).to.not.equal(null);
+          expect(data.comment).to.be.equal("The new comment");
+        });
+    });
+  })
 });
 

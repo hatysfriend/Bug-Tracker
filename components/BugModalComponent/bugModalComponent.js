@@ -29,20 +29,24 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                 }
 
                 setEventListeners() {
-                    let name = this.container.querySelector('#name');
+                    let name = this.container.querySelector('#title');
                     name.addEventListener('click', (e) => {
-                        this.descClick(name);
+                        this.ClickHandler(name, 'title');
                     });
-                    name.addEventListener('blur', (e) => {
-                        this.descFocusOut(name);
+
+                    let nameText = this.container.querySelector('#titleText');
+                    nameText.addEventListener('blur', (e) => {
+                        this.FocusOutHandler(nameText, 'title');
                     });
 
                     let desc = this.container.querySelector('#description');
                     desc.addEventListener('click', (e) => {
-                        this.descClick(desc);
+                        this.ClickHandler(desc, 'description');
                     });
-                    desc.addEventListener('blur', (e) => {
-                        this.descFocusOut(desc);
+
+                    let descText = this.container.querySelector('#descriptionText');
+                    descText.addEventListener('blur', (e) => {
+                        this.FocusOutHandler(descText, 'description');
                     });
 
                     let archiveButton = this.container.querySelector('#archive');
@@ -55,9 +59,9 @@ fetch('components/BugModalComponent/bugModalComponent.html')
     
                 initializeTemplate(bug) {
                     this.container.querySelector('#bugId').setAttribute('value', bug._id);
-                    this.container.querySelector('#name').innerHTML = bug.name;               
+                    this.container.querySelector('#title').innerHTML = bug.name;               
                     this.container.querySelector('#status').innerHTML = '<span class="fas fa-bug text-' + this.bugColour(bug) + ' mr-2"></span>' + bug.status;
-                    this.container.querySelector('#description').innerHTML = bug.description?.length > 0 ? bug.description : "Enter Description Here...";               
+                    this.container.querySelector('#description').textContent = bug.description?.length > 0 ? bug.description : "Enter Description Here...";               
                     this.container.querySelector('#modalTagList').innerHTML = this.tags(bug);
                     this.container.querySelector('#author').innerHTML = '<span class="badge badge-pill badge-light mr-2">' + bug.author.charAt(0) + '</span>' + bug.author;
                     this.container.querySelector('#prevTitle').value = bug.name;
@@ -66,16 +70,24 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     this.setEventListeners();
                 }
 
-                descClick(element) {
-                    element.classList.add('form-control');
-                    element.setAttribute('contenteditable', true);
-                    element.focus();
+                ClickHandler(element, name) {
+                    let parent = element.closest('#'+name+'Div');
+                    let div = parent.querySelector(`#${name}`);
+                    let text = parent.querySelector(`#${name}Text`);
+                    text.value = div.innerHTML;
+                    text.removeAttribute('hidden');
+                    div.setAttribute('hidden', true);
+                    text.focus();
                 }
-                
-                descFocusOut(element) {
+
+                FocusOutHandler(element, name) {
+                    let parent = element.closest(`#${name}Div`);
+                    let div = parent.querySelector('#'+name);
+                    let text = parent.querySelector(`#${name}Text`);
+                    div.innerHTML = text.value;
                     updateDescription();
-                    element.classList.remove('form-control');
-                    element.setAttribute('contenteditable', false);
+                    div.removeAttribute('hidden');
+                    text.setAttribute('hidden', true);
                 }
     
                 bugColour = (bug) => {

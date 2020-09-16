@@ -1,6 +1,7 @@
 module.exports = (() => {
     const bugObject = require("./bugSchemas");
     const database = require("./database");
+    const mongoose = require('mongoose');
   
     let BugModel = bugObject.bugModel;
 
@@ -18,22 +19,30 @@ module.exports = (() => {
     }
 
     async function _insertComment(bugId, comment) {
+        let insert = {
+            _id: mongoose.Types.ObjectId(),
+            comment: comment.comment,
+            user: comment.user,
+            likes: comment.likes,
+            date: comment.date,
+        }
         let bug = await BugModel.findById(bugId);
-        bug.comments.push(comment);
-        return await bug.save();
+        bug.comments.push(insert);
+        await bug.save();
+        return insert;
       }
 
     async function _updateComment(bugId, comment) {
         return await BugModel.findByIdAndUpdate(
-            {"bugId": bugId, "commentId": comment._id}, 
+            {"_id": bugId, "comments._id": comment._id}, 
             {
                 "$set": {
-                "comments.$": comment
+                "comments.$.comment": comment.comment
                 }
             },
-            {upsert: false, new: true},
+            {upsert: false, new: true, useFindAndModify: false},
             function(err,doc) {
-        
+                console.log("DOC"+doc);
           });
     }
 

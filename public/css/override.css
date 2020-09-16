@@ -14,16 +14,24 @@
    margin-bottom: 1rem;
 }
 
-#description, #name, .card-title {
-   overflow-wrap: break-word; 
-   overflow: hidden; 
-   height:max-content;
+.modal-header {
+   display: block;
 }
 
-#modal-title {
+#titleText {
+   max-width: 80%;
+}
+
+#description, #title, .card-title {
+   /* background-color: transparent; */
    overflow-wrap: break-word; 
    overflow: hidden; 
    height:max-content;
+   white-space: pre-wrap;
+}
+
+#descriptionText, #titleText, #commentTextArea {
+   resize: none;
 }
 
 .list-group-item {
@@ -101,13 +109,18 @@
 }
 
 #commentTextArea {
-   background: rgb(245, 148, 148) !important;
-   box-sizing: content-box;
+   /* background: rgb(245, 148, 148) !important; */
+   /* overflow-wrap: break-word; 
+   overflow: hidden; 
+   height: max-content;
    box-shadow: none;
-   height: 20px;
    margin: 0;
    min-height: 20px;
    padding: 0;
-   width: 100%;
-   resize: none;
+   resize: none; */
 }
+
+#commentSaveButton {
+  
+}
+
