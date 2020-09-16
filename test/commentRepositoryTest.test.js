@@ -90,7 +90,7 @@ describe('COMMENT TESTS ->', () => {
   });
 
   describe('Update Comment ->', () => {
-    it('Updates Comment Name With Bug', async (done) => {
+    it('Updates Comment Name With Bug', async () => {
       let commentOne = {
         comment: "This is comment one",
         user: insertedUser._id,
@@ -105,7 +105,7 @@ describe('COMMENT TESTS ->', () => {
         .then((data) => {
           console.log(data);
           expect(data).to.not.equal(null);
-          expect(data.comment).to.be.equal("The new comment");
+          expect(data.comments[0].comment).to.be.equal("The new comment");
         });
     });
   })

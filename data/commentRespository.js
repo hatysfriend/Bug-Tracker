@@ -33,17 +33,17 @@ module.exports = (() => {
       }
 
     async function _updateComment(bugId, comment) {
-        return await BugModel.findByIdAndUpdate(
+        return await BugModel.findOneAndUpdate(
             {"_id": bugId, "comments._id": comment._id}, 
             {
                 "$set": {
-                "comments.$.comment": comment.comment
+                "comments.$": comment
                 }
             },
             {upsert: false, new: true, useFindAndModify: false},
             function(err,doc) {
-                console.log("DOC"+doc);
-          });
+                console.log("DOC"+JSON.stringify(doc));
+          }).populate('comments.user');
     }
 
     return {
