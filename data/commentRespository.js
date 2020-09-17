@@ -14,8 +14,8 @@ module.exports = (() => {
 
     async function _deleteCommentByID(bugId, commentId) {
         let bug = await BugModel.findById(bugId);
-        bug.comments.id(commentId).remove();
-        return await bug.save();
+        bug.comments.pull(commentId);
+        await bug.save();
     }
 
     async function _insertComment(bugId, comment) {
@@ -32,14 +32,15 @@ module.exports = (() => {
         return insert;
       }
 
-    async function _updateComment(bugId, comment) {
+    async function _updateComment(bugId, commentId, comment) {
+        let set = {};
+        for(var prop in comment) {
+            set['comments.$.'+ prop] = comment[prop];
+        }
+
         return await BugModel.findOneAndUpdate(
-            {"_id": bugId, "comments._id": comment._id}, 
-            {
-                "$set": {
-                "comments.$": comment
-                }
-            },
+            {"_id": bugId, "comments._id": commentId}, 
+            {$set: set},
             {upsert: false, new: true, useFindAndModify: false},
             function(err,doc) {
                 console.log("DOC"+JSON.stringify(doc));
@@ -56,8 +57,8 @@ module.exports = (() => {
         InsertComment(bugId, comment) {
             return _insertComment(bugId, comment);
         },
-        UpdateComment(bugId, comment) {
-            return _updateComment(bugId, comment);
+        UpdateComment(bugId, comment, update) {
+            return _updateComment(bugId, comment, update);
         },
     };
 })(); 

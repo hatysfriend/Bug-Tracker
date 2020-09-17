@@ -33,8 +33,9 @@ fetch('components/CommentComponent/commentComponent.html')
                     validateButtonState() {
                         let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
                         if(commentTextArea.value.length <= 0) {
-                            let commentSaveButton = this.shadowDom.querySelector('#commentSaveButton');
-                            commentSaveButton.setAttribute('hidden', '');
+                            let commentControls = this.shadowDom.querySelector('#comment-controls');
+                            commentControls.style.display = 'none';
+                            commentTextArea.classList.remove("commentTextAreaWithSaveButton");
                         }
                     }
 
@@ -49,8 +50,10 @@ fetch('components/CommentComponent/commentComponent.html')
                     }
 
                     expandCommentTextArea() {
-                        let commentSaveButton = this.shadowDom.querySelector('#commentSaveButton');
-                        commentSaveButton.removeAttribute('hidden');
+                        let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
+                        commentTextArea.classList.add("commentTextAreaWithSaveButton");
+                        let commentControls = this.shadowDom.querySelector('#comment-controls');
+                        commentControls.style.display = 'inline-block';
                     }
 
                     enableSaveButton() {

@@ -9,7 +9,7 @@ let insertedBug;
 
 describe('COMMENT TESTS ->', () => {
   beforeEach(async () => {
-    // repo.DeleteCollection();
+    await bugRepo.DeleteCollection();
     let bug = {
       name: "Testy New Bug",
       author: "Thomas",
@@ -24,8 +24,8 @@ describe('COMMENT TESTS ->', () => {
     insertedUser = await seedUserData.seed();
   });
   
-  afterEach(() => {
-    bugRepo.DeleteCollection();
+  afterEach(async () => {
+    await bugRepo.DeleteCollection();
   });
   
   describe("Insert Single Comment ->", () => {
@@ -64,7 +64,8 @@ describe('COMMENT TESTS ->', () => {
   
       await commentRepo.InsertComment(insertedBug._id, commentOne);
       await commentRepo.InsertComment(insertedBug._id, commentTwo);
-  
+      
+      
       commentRepo.GetAllComments(insertedBug._id)
         .then((data) => {
           expect(data).to.not.equal(null);
@@ -100,14 +101,32 @@ describe('COMMENT TESTS ->', () => {
       let insertedComment = await commentRepo.InsertComment(insertedBug._id, commentOne);
       console.log('insertedComment'+ insertedComment._id);
       
-      let update = { _id: insertedComment._id, comment: "The new comment" }
-      commentRepo.UpdateComment(insertedBug._id, update)
+      let update = { comment: "The new comment" };
+      commentRepo.UpdateComment(insertedBug._id, insertedComment._id, update)
         .then((data) => {
-          console.log(data);
+          console.log("RETURNED Data: " + data);
           expect(data).to.not.equal(null);
           expect(data.comments[0].comment).to.be.equal("The new comment");
         });
     });
-  })
+  });
+
+  describe('Delete Comment ->', () => {
+    it('Delete a comment', async () => {
+      let comment = {
+        comment: "This COMMENT should be deleted...",
+        user: insertedUser._id,
+        likes: [{user: insertedUser._id}]
+      };
+
+      let insertedComment = await commentRepo.InsertComment(insertedBug._id, comment);
+
+      await commentRepo.DeleteCommentByID(insertedBug._id, insertedComment._id);
+
+      let bug = await bugRepo.GetBugByID(insertedBug._id);
+      expect(bug).to.not.equal(null);
+      expect(bug.comments.length).to.be.equal(0);
+    });
+  });
 });
 
