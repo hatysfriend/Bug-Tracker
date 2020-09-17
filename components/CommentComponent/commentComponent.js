@@ -3,8 +3,17 @@ fetch('components/CommentComponent/commentComponent.html')
         response.text()
             .then((res) => {
                 class CommentEntryComponent extends HTMLElement {
+                    set bug(value) {
+                        this._bug = value;
+                        console.log("The passed BUG: " + JSON.stringify(this._bug));
+                    }
+        
+                    get bug() {
+                        return this._bug;
+                    }
                     constructor() {
                         super();
+                        this._bug;
                         const parser = new DOMParser();
                         let html = parser.parseFromString(res, 'text/html');
 
@@ -16,6 +25,7 @@ fetch('components/CommentComponent/commentComponent.html')
 
                     setEventListeners() {
                         let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
+                        let saveButton = this.shadowDom.querySelector('#commentSaveButton');
                         
                         commentTextArea.addEventListener('focus', (e) => {
                             this.expandCommentTextArea();
@@ -28,13 +38,17 @@ fetch('components/CommentComponent/commentComponent.html')
                         commentTextArea.addEventListener('input', (e) => {
                             this.validateCommentEntryState();
                         });
+
+                        saveButton.addEventListener('click', (e) => {
+                            this.saveComment();
+                        })
                     }
 
                     validateButtonState() {
                         let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
                         if(commentTextArea.value.length <= 0) {
                             let commentControls = this.shadowDom.querySelector('#comment-controls');
-                            commentControls.style.display = 'none';
+                            commentControls.setAttribute('hidden', 'true');
                             commentTextArea.classList.remove("commentTextAreaWithSaveButton");
                         }
                     }
@@ -53,7 +67,8 @@ fetch('components/CommentComponent/commentComponent.html')
                         let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
                         commentTextArea.classList.add("commentTextAreaWithSaveButton");
                         let commentControls = this.shadowDom.querySelector('#comment-controls');
-                        commentControls.style.display = 'inline-block';
+                        
+                        commentControls.removeAttribute('hidden');
                     }
 
                     enableSaveButton() {
@@ -64,6 +79,12 @@ fetch('components/CommentComponent/commentComponent.html')
                     disableSaveButton() {
                         let commentSaveButton = this.shadowDom.querySelector('#commentSaveButton');
                         commentSaveButton.setAttribute('disabled', true);
+                    }
+
+                    saveComment() {
+                        let comment = this.shadowDom.querySelector('#commentTextArea').value;
+                        console.log("the Comment: " + comment)
+                        CreateComment(this.bug._id, comment);
                     }
 
                 }

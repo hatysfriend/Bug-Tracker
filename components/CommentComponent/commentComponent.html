@@ -1,21 +1,20 @@
- <template id="commentEntryTemplate">
+<template id="commentEntryTemplate">
     <style>
         @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
         @import url("/css/custom.css");
         @import url("/css/override.css");
-    </style> 
+    </style>
     <div class="form-group">
-        <label for="commentsEntry"><span class="fas fa-list-ul mr-1"></span> Comments </label><br>
+        <label for="commentsEntry"><span class="fa fa-comment-o mr-1"></span> Comments </label><br>
         <div id="commentsEntryDiv">
             <textarea class="form-control" name="commentTextArea" id="commentTextArea" placeholder="Write a comment..."></textarea>
-            
-            <div id="comment-controls">
-                <button id="commentSaveButton" class="btn btn-success" disabled >Save</button>
-                <a href="#"> <i class="fa fa-file fa-2x"></i></a>
-                <a href="#"> <i class="fa fa-file fa-2x"></i></a>
-                <a href="#"> <i class="fa fa-file fa-2x"></i></a>
+            <div class="row" id="comment-controls" hidden>
+                <button id="commentSaveButton" class="btn btn-success col-3" disabled>Save</button>
+                <div id="comment-icons" class="offset-7">
+                    <a href="#"> <i class="fa fa-file fa-2x ml-1" style="vertical-align: middle"></i></a>
+                    <a href="#"> <i class="fa fa-paperclip fa-2x ml-1" style="vertical-align: middle"></i></a>
+                </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -24,8 +23,7 @@
     <div style="min-height:100px;" class="form-group">
         <label for="commentsDisplay"><span class="fas fa-list-ul mr-1"></span> comments </label><br>
         <div id="commentsDisplayDiv">
-            <span style="min-height:100px;" name="commentsDisplay" id="commentsDisplay"
-                class=""></span><br>
+            <span style="min-height:100px;" name="commentsDisplay" id="commentsDisplay" class=""></span><br>
         </div>
     </div>
 </template>

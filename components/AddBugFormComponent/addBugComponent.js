@@ -74,4 +74,3 @@ fetch("/components/AddBugFormComponent/addBugComponent.html").then((response) =>
     customElements.define("bug-new-button", AddBugComponent);
   });
 });
-//Nice Component Thomas - Well Done A+

@@ -108,20 +108,23 @@
 
 #commentTextArea {
    resize: none;
+   min-height: 10px;
    
 }
 
 .commentTextAreaWithSaveButton {
    padding-bottom: 48px;
-   display: inline-block;
 }
 
 #comment-controls {
-   display: none;
-   position: absolute;
-   bottom: 140px;
-   left: 30px;
-   vertical-align: bottom !important;
+   /* display: inline-block; */
+   position: relative;
+   bottom: 45px;
+   margin-left: 2%;
+}
+
+#comment-icons {
+   position: relative;
 }
 
 

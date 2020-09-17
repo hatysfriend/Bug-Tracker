@@ -51,3 +51,15 @@ async function GetUserName() {
   console.log("THIS IS THE RESULT: " + result);
   return await result.text();
 }
+
+async function CreateComment(bugId, comment) {
+  let commentObj = {comment: comment};
+  return await fetch("/comments/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bugId: bugId,
+      comment: commentObj
+    })
+  });
+}

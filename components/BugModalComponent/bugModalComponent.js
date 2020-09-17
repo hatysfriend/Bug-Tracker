@@ -7,7 +7,6 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     this._bug = value;
                     this.initializeTemplate(this.bug);
                 }
-    
                 get bug() {
                     return this._bug;
                 }
@@ -24,8 +23,8 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     this.shadowDom = shadowRoot;
                     this.container = this.shadowDom.getElementById('addBugModal');
 
-                    let commentEntry = document.createElement('comment-entry-component');
-                    this.container.querySelector('#commentEntryContainer').appendChild(commentEntry);
+                    this.commentEntry = document.createElement('comment-entry-component');
+                    this.container.querySelector('#commentEntryContainer').appendChild(this.commentEntry);
                 }
 
                 setEventListeners() {
@@ -67,6 +66,7 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     this.container.querySelector('#prevTitle').value = bug.name;
                     let date = new Date(bug.date).toLocaleDateString();
                     this.container.querySelector('#date').innerHTML = date;
+                    this.commentEntry.bug = bug;
                     this.setEventListeners();
                 }
 
