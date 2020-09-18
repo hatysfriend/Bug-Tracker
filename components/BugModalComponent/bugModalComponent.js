@@ -67,7 +67,18 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     let date = new Date(bug.date).toLocaleDateString();
                     this.container.querySelector('#date').innerHTML = date;
                     this.commentEntry.bug = bug;
+                    this.initializeCommentsList(bug);
                     this.setEventListeners();
+                }
+
+                initializeCommentsList(bug) {
+                    bug.comments.forEach(comment => {
+                        let commentDisplayComponent = document.createElement('comment-display-component');
+                        commentDisplayComponent.comment = comment;
+                        commentDisplayComponent.bug = bug;
+                        console.log(this.container.querySelector('#commentDisplayContainer'));
+                        this.container.querySelector('#commentDisplayContainer').appendChild(commentDisplayComponent);
+                    });
                 }
 
                 ClickHandler(element, name) {

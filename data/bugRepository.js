@@ -22,7 +22,7 @@ module.exports = (() => {
   }
 
   async function _getAllBugs() {
-    return await BugModel.find({archived: false})
+    return await BugModel.find({archived: false}).populate('comments.user');
   }
 
   async function _deleteCollection() {
@@ -30,7 +30,7 @@ module.exports = (() => {
   }
 
   async function _getBugByID(id) {
-    return await BugModel.findById(id);
+    return await BugModel.findById(id).populate('comments.user');
   }
 
   async function _updateBug(query) {

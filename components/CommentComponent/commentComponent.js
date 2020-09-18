@@ -47,9 +47,7 @@ fetch('components/CommentComponent/commentComponent.html')
                     validateButtonState() {
                         let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
                         if(commentTextArea.value.length <= 0) {
-                            let commentControls = this.shadowDom.querySelector('#comment-controls');
-                            commentControls.setAttribute('hidden', 'true');
-                            commentTextArea.classList.remove("commentTextAreaWithSaveButton");
+                            this.compressCommentTextArea();
                         }
                     }
 
@@ -67,8 +65,14 @@ fetch('components/CommentComponent/commentComponent.html')
                         let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
                         commentTextArea.classList.add("commentTextAreaWithSaveButton");
                         let commentControls = this.shadowDom.querySelector('#comment-controls');
-                        
                         commentControls.removeAttribute('hidden');
+                    }
+
+                    compressCommentTextArea() {
+                        let commentTextArea = this.shadowDom.querySelector('#commentTextArea');
+                        commentTextArea.classList.remove("commentTextAreaWithSaveButton");
+                        let commentControls = this.shadowDom.querySelector('#comment-controls');
+                        commentControls.setAttribute('hidden', true);
                     }
 
                     enableSaveButton() {
@@ -81,10 +85,12 @@ fetch('components/CommentComponent/commentComponent.html')
                         commentSaveButton.setAttribute('disabled', true);
                     }
 
-                    saveComment() {
+                    async saveComment() {
+                        this.compressCommentTextArea();
                         let comment = this.shadowDom.querySelector('#commentTextArea').value;
                         console.log("the Comment: " + comment)
-                        CreateComment(this.bug._id, comment);
+                        await CreateComment(this.bug._id, comment);
+                        loadBugs();
                     }
 
                 }

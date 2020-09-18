@@ -46,6 +46,16 @@ async function GetBugById(bugId) {
   return await result.json();
 }
 
+async function GetAllComments(bugId) {
+  return result = await fetch("/comments/getall", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bugId: bugId
+    })
+  });
+}
+
 async function GetUserName() {
   let result = await fetch("/auth/getusername");
   console.log("THIS IS THE RESULT: " + result);
@@ -62,4 +72,7 @@ async function CreateComment(bugId, comment) {
       comment: commentObj
     })
   });
+
+
+
 }
