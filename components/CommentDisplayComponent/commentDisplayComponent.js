@@ -29,19 +29,12 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         console.log("HTML" +html.getElementById('commentDisplayTemplate').content);
                         let shadowRoot = this.attachShadow({ mode: 'open' });
                         shadowRoot.appendChild(html.getElementById('commentDisplayTemplate').content.cloneNode(true));
-                        this.shadowDom = shadowRoot;
-                        
-                        this.setEventListeners();
+                        this.shadowDom = shadowRoot;                
                     }
 
                     initializeCommentsList() {
-                        console.log("COmmmetn USER "+ JSON.stringify(this._comment));
                         this.shadowRoot.querySelector('#commentLabel').textContent = this._comment.user.username;
                         this.shadowRoot.querySelector('#commentsDisplay').textContent = this._comment.comment;
-                    }
-
-                    setEventListeners() {
-                       
                     }
 
                 }

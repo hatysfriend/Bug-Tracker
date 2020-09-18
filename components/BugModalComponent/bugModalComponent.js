@@ -72,11 +72,11 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                 }
 
                 initializeCommentsList(bug) {
-                    bug.comments.forEach(comment => {
+                    console.log("Have we gone to the list again");
+                    bug.comments.reverse().forEach(comment => {
                         let commentDisplayComponent = document.createElement('comment-display-component');
                         commentDisplayComponent.comment = comment;
                         commentDisplayComponent.bug = bug;
-                        console.log(this.container.querySelector('#commentDisplayContainer'));
                         this.container.querySelector('#commentDisplayContainer').appendChild(commentDisplayComponent);
                     });
                 }

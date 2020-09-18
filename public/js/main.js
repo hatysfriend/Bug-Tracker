@@ -109,6 +109,11 @@ let initialize = () => {
   CreateUserStatus();
   flashDisplay();
   logoAnimation();
+  document.addEventListener('update-modal', (e) => {
+    editClick(e.target._bug._id);
+    loadBugs();
+    console.log("We Recieved the event bubble@!");
+  });
 };
 
 window.onload = initialize;

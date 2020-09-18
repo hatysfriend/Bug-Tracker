@@ -85,12 +85,14 @@ fetch('components/CommentComponent/commentComponent.html')
                         commentSaveButton.setAttribute('disabled', true);
                     }
 
-                    async saveComment() {
+                    saveComment() {
                         this.compressCommentTextArea();
                         let comment = this.shadowDom.querySelector('#commentTextArea').value;
-                        console.log("the Comment: " + comment)
-                        await CreateComment(this.bug._id, comment);
-                        loadBugs();
+                        CreateComment(this.bug._id, comment);
+                        // updateComment();
+                        console.log("Dispatching Event");
+                        // let event = CustomEvent('update-modal', {detail})
+                        this.shadowDom.dispatchEvent(new Event('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                     }
 
                 }
