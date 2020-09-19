@@ -109,9 +109,9 @@ let initialize = () => {
   CreateUserStatus();
   flashDisplay();
   logoAnimation();
-  document.addEventListener('update-modal', (e) => {
-    editClick(e.target._bug._id);
-    loadBugs();
+  document.addEventListener('update-modal', async (e) => {
+    await editClick(e.target._bug._id);
+    await loadBugs();
     console.log("We Recieved the event bubble@!");
   });
 };
