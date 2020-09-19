@@ -34,8 +34,8 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     });
 
                     let nameText = this.container.querySelector('#titleText');
-                    nameText.addEventListener('blur', (e) => {
-                        this.FocusOutHandler(nameText, 'title');
+                    nameText.addEventListener('blur', async (e) => {
+                        await this.FocusOutHandler(nameText, 'title');
                     });
 
                     let desc = this.container.querySelector('#description');
@@ -44,8 +44,8 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     });
 
                     let descText = this.container.querySelector('#descriptionText');
-                    descText.addEventListener('blur', (e) => {
-                        this.FocusOutHandler(descText, 'description');
+                    descText.addEventListener('blur', async (e) => {
+                        await this.FocusOutHandler(descText, 'description');
                     });
 
                     let archiveButton = this.container.querySelector('#archive');
@@ -91,14 +91,37 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                     text.focus();
                 }
 
-                FocusOutHandler(element, name) {
+                async FocusOutHandler(element, name) {
                     let parent = element.closest(`#${name}Div`);
                     let div = parent.querySelector('#'+name);
                     let text = parent.querySelector(`#${name}Text`);
                     div.innerHTML = text.value;
-                    updateDescription();
+                    this.UpdateDescription(element);
                     div.removeAttribute('hidden');
                     text.setAttribute('hidden', true);
+                }
+
+                async UpdateDescription(element) {
+                    let id = element.getAttribute('id');
+                    let content = element.textContent;
+                    let prev = this.container.querySelector('#prevTitle').value
+                    if(id === 'description') {
+                        await UpdateBug(this.bug._id, {
+                            description: content
+                        });
+                    }
+
+                    if(id === 'title') {
+                        title.trim();
+                        if (title.length <= 0) {
+                            title = prev;
+                        }
+                        await UpdateBug(this.bug._id, {
+                            name: content
+                        });
+                    }
+
+                    this.shadowDom.dispatchEvent(new Event('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                 }
     
                 bugColour = (bug) => {

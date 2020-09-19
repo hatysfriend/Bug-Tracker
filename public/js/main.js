@@ -22,8 +22,6 @@ function CreateUserStatus() {
 
 let editClick = async (bugId) => {
   let bug = await GetBugById(bugId);
-
-  (async function createModalComponent() {
     let modalContainer = document.getElementById("modalContainer");
     let modalComponent = document.createElement("bug-modal-component");
     modalComponent.bug = bug;
@@ -36,7 +34,6 @@ let editClick = async (bugId) => {
       backdrop.remove();
     }
     showBugModal();
-  })();
 };
 
 let loadBugs = async () => {
@@ -89,7 +86,7 @@ function getButtonTemplate(status) {
 }
 
 let bugStatusUpdater = async (bugID, status) => {
-  UpdateBug(bugID, {status: status});
+  await UpdateBug(bugID, {status: status});
 };
 
 let dragger = () => {
@@ -97,21 +94,21 @@ let dragger = () => {
     document.querySelector("#Created"),
     document.querySelector("#In-Progress"),
     document.querySelector("#Fixed"),
-  ]).on("drop", function (el, target) {
-    bugStatusUpdater(el.getAttribute("bugid"), target.getAttribute("id"));
+  ]).on("drop", async function (el, target) {
+    await bugStatusUpdater(el.getAttribute("bugid"), target.getAttribute("id"));
   });
   console.log("Loaded");
 };
 
-let initialize = () => {
-  loadBugs();
-  dragger();
+let initialize = async () => {
+  await loadBugs();
+  await dragger();
   CreateUserStatus();
   flashDisplay();
   logoAnimation();
   document.addEventListener('update-modal', async (e) => {
-    await editClick(e.target._bug._id);
     await loadBugs();
+    await editClick(e.target._bug._id);
     console.log("We Recieved the event bubble@!");
   });
 };
