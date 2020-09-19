@@ -5,7 +5,6 @@ fetch('components/CommentComponent/commentComponent.html')
                 class CommentEntryComponent extends HTMLElement {
                     set bug(value) {
                         this._bug = value;
-                        console.log("The passed BUG: " + JSON.stringify(this._bug));
                     }
         
                     get bug() {

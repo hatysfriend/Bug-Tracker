@@ -20,6 +20,7 @@ async function AddBug(bug) {
 }
 
 async function UpdateBug(bugId, updateObject) {
+  console.log("The updated Bug" + JSON.stringify(updateObject));
   return await fetch("/bugs/update", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -58,7 +59,6 @@ async function GetAllComments(bugId) {
 
 async function GetUserName() {
   let result = await fetch("/auth/getusername");
-  console.log("THIS IS THE RESULT: " + result);
   return await result.text();
 }
 

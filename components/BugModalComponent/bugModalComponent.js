@@ -103,18 +103,18 @@ fetch('components/BugModalComponent/bugModalComponent.html')
 
                 async UpdateDescription(element) {
                     let id = element.getAttribute('id');
-                    let content = element.textContent;
-                    let prev = this.container.querySelector('#prevTitle').value
-                    if(id === 'description') {
+                    let content = element.value;
+                    let prev = this.container.querySelector('#prevTitle').value;
+                    if(id === 'descriptionText') {
                         await UpdateBug(this.bug._id, {
                             description: content
                         });
                     }
 
-                    if(id === 'title') {
-                        title.trim();
-                        if (title.length <= 0) {
-                            title = prev;
+                    if(id === 'titleText') {
+                        content.trim();
+                        if (content.length <= 0) {
+                            content = prev;
                         }
                         await UpdateBug(this.bug._id, {
                             name: content
