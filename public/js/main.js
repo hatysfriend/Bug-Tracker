@@ -106,11 +106,18 @@ let initialize = async () => {
   CreateUserStatus();
   flashDisplay();
   logoAnimation();
+
   document.addEventListener('update-modal', async (e) => {
     await loadBugs();
-    await editClick(e.target._bug._id);
-    console.log("We Recieved the event bubble@!");
-  });
+    await editClick(e.detail._id);
+    console.log("We Recieved the event Modal@!");
+  }, {capture: true});
+
+  document.addEventListener('update-containers', async (e) => {
+    console.log("We Recieved the bubble@ Containers!");
+    $('#addBugModal').modal('hide');         
+    loadBugs();
+  }, {capture: true});
 };
 
 window.onload = initialize;

@@ -50,9 +50,8 @@ fetch('components/BugModalComponent/bugModalComponent.html')
 
                     let archiveButton = this.container.querySelector('#archive');
                     archiveButton.addEventListener('click', (e) => {
-                        $('#addBugModal').modal('hide');
                         UpdateBug(this.bug._id, {archived: true});
-                        loadBugs();
+                        this.container.dispatchEvent(new CustomEvent('update-containers', {bubbles: true, composed:true }));
                     })
                 }
     
@@ -121,7 +120,7 @@ fetch('components/BugModalComponent/bugModalComponent.html')
                         });
                     }
 
-                    this.shadowDom.dispatchEvent(new Event('update-modal', {detail: this.bug, bubbles: true, composed: true}));
+                    this.container.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                 }
     
                 bugColour = (bug) => {

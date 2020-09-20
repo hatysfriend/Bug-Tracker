@@ -88,12 +88,8 @@ fetch('components/CommentComponent/commentComponent.html')
                         this.compressCommentTextArea();
                         let comment = this.shadowDom.querySelector('#commentTextArea').value;
                         CreateComment(this.bug._id, comment);
-                        // updateComment();
-                        console.log("Dispatching Event");
-                        // let event = CustomEvent('update-modal', {detail})
-                        this.shadowDom.dispatchEvent(new Event('update-modal', {detail: this.bug, bubbles: true, composed: true}));
+                        this.shadowDom.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                     }
-
                 }
                 customElements.define('comment-entry-component', CommentEntryComponent);
             });

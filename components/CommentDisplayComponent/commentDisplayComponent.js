@@ -29,7 +29,8 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         console.log("HTML" +html.getElementById('commentDisplayTemplate').content);
                         let shadowRoot = this.attachShadow({ mode: 'open' });
                         shadowRoot.appendChild(html.getElementById('commentDisplayTemplate').content.cloneNode(true));
-                        this.shadowDom = shadowRoot;                
+                        this.shadowDom = shadowRoot;       
+                        this.shadowDom.dispatchEvent(new CustomEvent('test', {detail: this, bubbles: true, composed: false}));         
                     }
 
                     initializeCommentsList() {
