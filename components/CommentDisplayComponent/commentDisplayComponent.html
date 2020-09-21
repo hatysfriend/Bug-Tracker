@@ -1,9 +1,22 @@
 <script src="/js/updateModal.js"></script>
 <template id="commentDisplayTemplate">
-    <div style="min-height:100px;" class="form-group">
-        <label id="commentLabel" for="commentsDisplay"><span class="fas fa-list-ul mr-1"></span> Comments </label><br>
-        <div id="commentsDisplayDiv">
-            <textarea style="min-height:100px;" name="commentsDisplay" id="commentsDisplay" class=""></textarea>
+    <style>
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+        @import url("/css/custom.css");
+        @import url("/css/override.css");
+    </style>
+    <div id="commentDisplayDiv" style="min-height:100px;">
+        <div class="row no-gutters">
+            <div class="col-0 ml-1">
+                <label id="commentUserBadge"></label>
+            </div>
+            <div class="col-11">
+                <div class="row"> 
+                    <label class="mr-2" id="commentLabel" for="commentsDisplay"></label>
+                    <div id="commentDate"></div>
+                </div>
+                <textarea name="commentsDisplay" id="commentsDisplay"></textarea>
+            </div>
         </div>
     </div>
 </template>

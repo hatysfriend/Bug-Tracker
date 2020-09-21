@@ -6,7 +6,7 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                     get bug() {
                         return this._bug;
                     }
-                    
+
                     set bug(value) {
                         this._bug = value;
                     }
@@ -14,30 +14,44 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                     get comment() {
                         return this._comment;
                     }
-                    
+
                     set comment(value) {
                         this._comment = value;
                         this.initializeCommentsList();
                     }
-        
+
                     constructor() {
                         super();
                         this._bug;
                         this._comment;
                         const parser = new DOMParser();
                         let html = parser.parseFromString(res, 'text/html');
-                        console.log("HTML" +html.getElementById('commentDisplayTemplate').content);
+                        console.log("HTML" + html.getElementById('commentDisplayTemplate').content);
                         let shadowRoot = this.attachShadow({ mode: 'open' });
                         shadowRoot.appendChild(html.getElementById('commentDisplayTemplate').content.cloneNode(true));
-                        this.shadowDom = shadowRoot;       
-                        this.shadowDom.dispatchEvent(new CustomEvent('test', {detail: this, bubbles: true, composed: false}));         
+                        this.shadowDom = shadowRoot;
+                        // this.setEventListeners();
+                    }
+
+                    setEventListeners() {
+                        let commentDate = this.shadowRoot.querySelector('#commentDate');
+                        commentDate.addEventListener('mouseover', (e)=> {
+                            
+                        });
                     }
 
                     initializeCommentsList() {
-                        this.shadowRoot.querySelector('#commentLabel').textContent = this._comment.user.username;
+                        this.shadowRoot.querySelector('#commentUserBadge').innerHTML = `<h5><span class="badge badge-pill badge-light mr-2">${this._comment.user.username.charAt(0).toUpperCase()}</span></h5>`
+                        this.shadowRoot.querySelector('#commentLabel').innerHTML =`<strong>${this._comment.user.username.charAt(0).toUpperCase()}${this._comment.user.username.slice(1)}</strong>`;
                         this.shadowRoot.querySelector('#commentsDisplay').textContent = this._comment.comment;
+                        this.shadowRoot.querySelector('#commentDate').innerHTML = this.convertDisplayDate(this._comment.date).fontsize(1);
                     }
 
+                    convertDisplayDate(commentDate) {
+                        let date = new Date(commentDate);
+                        let formatted_date = `${date.toLocaleDateString('en-AU', {month: 'short'})} ${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`;
+                        return formatted_date;
+                    }
                 }
                 customElements.define('comment-display-component', CommentDisplayComponent);
             });
