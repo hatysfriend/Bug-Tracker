@@ -49,7 +49,22 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
 
                     convertDisplayDate(commentDate) {
                         let date = new Date(commentDate);
+                        let currentTime = new Date(); 
+                        let timeDifference = new Date(currentTime.getTime() - date.getTime());
+                        let timeDifferenceHours = timeDifference/1000/3600;
                         let formatted_date = `${date.toLocaleDateString('en-AU', {month: 'short'})} ${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`;
+                        if((timeDifferenceHours*60) < 1)
+                        {
+                            return `a few seconds ago`;
+                        }
+                        if(timeDifferenceHours < 1)
+                        {
+                            return `commented ${Math.ceil(timeDifferenceHours*60)} mins ago`;
+                        }
+                        if(timeDifferenceHours < 6)
+                        {
+                            return `commented ${Math.ceil(timeDifferenceHours)} hours ago`;
+                        }
                         return formatted_date;
                     }
                 }
