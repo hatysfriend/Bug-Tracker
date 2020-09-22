@@ -59,11 +59,11 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         }
                         if(timeDifferenceHours < 1)
                         {
-                            return `commented ${Math.ceil(timeDifferenceHours*60)} mins ago`;
+                            return `commented ${Math.round(timeDifferenceHours*60)} mins ago`;
                         }
                         if(timeDifferenceHours < 6)
                         {
-                            return `commented ${Math.ceil(timeDifferenceHours)} hours ago`;
+                            return `commented ${Math.round(timeDifferenceHours)} hours ago`;
                         }
                         return formatted_date;
                     }
