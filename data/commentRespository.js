@@ -57,8 +57,8 @@ module.exports = (() => {
         InsertComment(bugId, comment) {
             return _insertComment(bugId, comment);
         },
-        UpdateComment(bugId, comment, update) {
-            return _updateComment(bugId, comment, update);
+        UpdateComment(bugId, commentId, update) {
+            return _updateComment(bugId, commentId, update);
         },
     };
 })(); 

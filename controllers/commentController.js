@@ -2,7 +2,8 @@ const repository = require("../data/commentRespository");
 
 module.exports = {
 	update_comment: async (req, res) => {
-		await repository.UpdateComment(req.body.bugId, req.body.comment);
+		console.log('Update Comment??: '+JSON.stringify(req.body))
+		await repository.UpdateComment(req.body.bugId, req.body.comment._id, req.body.comment);
 		res.status(200);
 	},
 
@@ -19,7 +20,8 @@ module.exports = {
 	},
 
 	delete_comment: async (req, res) => {
-		await repository.DeleteCommentByID(req.body.bugId, req.body.comment._id)
+		console.log(`BUGID:${req.body.bugId} CommentID:${req.body.commentId}`);
+		await repository.DeleteCommentByID(req.body.bugId, req.body.commentId)
 			.then(res.status(200))
 			.catch((err) => {
 				console.log(err);

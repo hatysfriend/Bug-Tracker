@@ -72,7 +72,27 @@ async function CreateComment(bugId, comment) {
       comment: commentObj
     })
   });
-
-
-
 }
+
+async function UpdateComment(bugId, commentObj) {
+  return await fetch("/comments/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bugId: bugId,
+      comment: commentObj,
+    }),
+  });
+}
+
+  async function DeleteComment(bugId, commentId) {
+    console.log("DID WE GET HERE?");
+    return await fetch("/comments/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        bugId: bugId,
+        commentId: commentId
+      })
+    });
+  }

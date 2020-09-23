@@ -27,16 +27,42 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         const parser = new DOMParser();
                         let html = parser.parseFromString(res, 'text/html');
                         console.log("HTML" + html.getElementById('commentDisplayTemplate').content);
+                        
                         let shadowRoot = this.attachShadow({ mode: 'open' });
                         shadowRoot.appendChild(html.getElementById('commentDisplayTemplate').content.cloneNode(true));
                         this.shadowDom = shadowRoot;
-                        // this.setEventListeners();
+                        this.setEventListeners();
                     }
 
                     setEventListeners() {
-                        let commentDate = this.shadowRoot.querySelector('#commentDate');
-                        commentDate.addEventListener('mouseover', (e)=> {
-                            
+                        let commentDisplayDiv = this.shadowDom.querySelector('#commentDisplayDiv');
+                        let commentDelete = this.shadowDom.querySelector('#comment-delete');
+                        let commentEdit = this.shadowDom.querySelector('#comment-edit');
+                        let commentUpvote = this.shadowDom.querySelector('#comment-upvote');
+                        let commentDisplay = this.shadowDom.querySelector('#commentsDisplay');
+
+                        commentDelete.addEventListener('click', (e)=> {
+                            DeleteComment(this._bug._id, this._comment._id);
+                            commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
+                        });
+
+                        // commentEdit.addEventListener('click', (e)=> {
+                        //     commentDisplay.focus();
+                        // });
+
+                        commentEdit.addEventListener('click', (e)=> {
+                            let comment = this.shadowDom.querySelector('#commentsDisplay').value;
+                            let commentObj = {
+                                _id: this.comment._id,
+                                comment: comment
+                            }
+                            UpdateComment(this._bug._id, commentObj);
+                            commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
+                        });
+
+                        commentUpvote.addEventListener('click', (e)=> {
+                            //to be completed
+                            commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                         });
                     }
 
