@@ -34,14 +34,62 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         this.shadowDom = shadowRoot;
                     }
 
+                    async initializeCommentsList() {
+                        this.shadowRoot.querySelector('#commentUserBadge').innerHTML = `<h5><span class="badge badge-pill badge-light mr-2">${this._comment.user.username.charAt(0).toUpperCase()}</span></h5>`
+                        this.shadowRoot.querySelector('#commentLabel').innerHTML =`<strong>${this._comment.user.username.charAt(0).toUpperCase()}${this._comment.user.username.slice(1)}</strong>`;
+                        this.shadowRoot.querySelector('#commentsDisplay').textContent = this._comment.comment;
+                        this.shadowRoot.querySelector('#commentDate').innerHTML = this.convertDisplayDate(this._comment.date).fontsize(1);
+                        console.log(this.comment.likes);
+                        this.shadowRoot.querySelector('#upvote-count').innerHTML = this.comment.likes.length;
+
+                        let userCheck = await this.checkUser();
+                        if(userCheck) {
+                            let deleteElement = document.createElement("a");
+                            deleteElement.setAttribute('id', 'comment-delete');
+                            deleteElement.innerHTML = 'Delete';
+                            deleteElement.setAttribute('href', '#');
+                            let editElement = document.createElement("a");
+                            editElement.setAttribute('id', 'comment-edit');
+                            editElement.innerHTML = 'Edit';
+                            editElement.setAttribute('href', '#');
+                            
+                            this.shadowRoot.querySelector('#comment-options').appendChild(editElement);
+                            this.shadowRoot.querySelector('#comment-options').appendChild(document.createTextNode(' - '));
+                            this.shadowRoot.querySelector('#comment-options').appendChild(deleteElement);
+
+                            this.setCurrentUserEventListeners();
+                        }  
+                        this.setEventListeners();
+                    }
+
+                    async checkUser() {
+                        let currentUser = await GetCurrentUser();
+                        console.log(`Current User: ${JSON.stringify(currentUser)} and the Comment User: ${this.comment.user._id}`);
+                        if(currentUser === this.comment.user._id) {
+                            return true;
+                        }
+                        return false;
+                    }
+
                     setEventListeners() {
-                        let commentDisplayDiv = this.shadowDom.querySelector('#commentDisplayDiv');
                         let commentUpvote = this.shadowDom.querySelector('#comment-upvote');
 
                         commentUpvote.addEventListener('click', (e)=> {
-                            //to be completed
-                            commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
+                            this.updateUpvote();
                         });
+                    }
+
+                    async updateUpvote() {
+                        let commentDisplayDiv = this.shadowDom.querySelector('#commentDisplayDiv');
+                        let currentUser = await GetCurrentUser();
+                        console.log("THE CURRENT USER IS:" + JSON.stringify(currentUser));
+
+                        let commentObj = {
+                            _id: this.comment._id,
+                            likes: [{currentUser}]
+                        }
+                        UpdateComment(this._bug._id, commentObj);
+                        commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                     }
 
                     setCurrentUserEventListeners() {
@@ -60,7 +108,6 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         });
 
                         commentEdit.addEventListener('click', (e)=> {
-                            let comment = this.shadowDom.querySelector('#commentsDisplay').value;
                             let commentObj = {
                                 _id: this.comment._id,
                                 comment: comment
@@ -70,58 +117,28 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         });
                     }
 
-                    async initializeCommentsList() {
-                        this.shadowRoot.querySelector('#commentUserBadge').innerHTML = `<h5><span class="badge badge-pill badge-light mr-2">${this._comment.user.username.charAt(0).toUpperCase()}</span></h5>`
-                        this.shadowRoot.querySelector('#commentLabel').innerHTML =`<strong>${this._comment.user.username.charAt(0).toUpperCase()}${this._comment.user.username.slice(1)}</strong>`;
-                        this.shadowRoot.querySelector('#commentsDisplay').textContent = this._comment.comment;
-                        this.shadowRoot.querySelector('#commentDate').innerHTML = this.convertDisplayDate(this._comment.date).fontsize(1);
-                        
-                        let userCheck = await this.checkUser();
-                        if(userCheck) {
-                            let deleteElement = document.createElement("a");
-                            deleteElement.setAttribute('id', 'comment-delete');
-                            deleteElement.innerHTML = 'Delete';
-                            deleteElement.setAttribute('href', '#');
-                            let editElement = document.createElement("a");
-                            editElement.setAttribute('id', 'comment-edit');
-                            editElement.innerHTML = 'Edit';
-                            editElement.setAttribute('href', '#');
-                            
-                            this.shadowRoot.querySelector('#comment-options').appendChild(editElement);
-                            this.shadowRoot.querySelector('#comment-options').appendChild(document.createTextNode(' - '));
-                            this.shadowRoot.querySelector('#comment-options').appendChild(deleteElement);
-
-                            this.setCurrentUserEventListeners();
-                        }  
-                        
-                        this.setEventListeners();
-                    }
-
-                    async checkUser() {
-                        let currentUser = await GetCurrentUser();
-                        console.log(`Current User: ${JSON.stringify(currentUser)} and the Comment User: ${this.comment.user._id}`);
-                        if(currentUser === this.comment.user._id) {
-                            return true;
-                        }
-                        return false;
-                    }
-
                     convertDisplayDate(commentDate) {
                         let date = new Date(commentDate);
+                        let minutes = date.getMinutes();
+                        let hours = date.getHours();
+                        if( hours < 10) {
+                           hours = `0${hours}`; 
+                        }
+                        if(minutes < 10) {
+                           minutes = `0${minutes}`; 
+                        }
+                        let formatted_date = `${date.toLocaleDateString('en-AU', {month: 'short'})} ${date.getDate()} at ${hours}:${minutes}`;
+                    
                         let currentTime = new Date(); 
                         let timeDifference = new Date(currentTime.getTime() - date.getTime());
                         let timeDifferenceHours = timeDifference/1000/3600;
-                        let formatted_date = `${date.toLocaleDateString('en-AU', {month: 'short'})} ${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`;
-                        if((timeDifferenceHours*60) < 1)
-                        {
+                        if((timeDifferenceHours*60) < 1) {
                             return `a few seconds ago`;
                         }
-                        if(timeDifferenceHours < 1)
-                        {
+                        if(timeDifferenceHours < 1) {
                             return `commented ${Math.round(timeDifferenceHours*60)} mins ago`;
                         }
-                        if(timeDifferenceHours < 6)
-                        {
+                        if(timeDifferenceHours < 6) {
                             return `commented ${Math.round(timeDifferenceHours)} hours ago`;
                         }
                         return formatted_date;
