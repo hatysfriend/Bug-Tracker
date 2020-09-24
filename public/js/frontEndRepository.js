@@ -96,3 +96,8 @@ async function UpdateComment(bugId, commentObj) {
       })
     });
   }
+
+  async function GetCurrentUser() {
+    let result = await fetch("/auth/getUser");
+    return await result.json();
+  }

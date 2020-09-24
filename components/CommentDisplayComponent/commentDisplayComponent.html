@@ -7,8 +7,16 @@
     </style>
     <div id="commentDisplayDiv" style="min-height:100px;">
         <div class="row no-gutters">
-            <div class="col-0 ml-1">
-                <label id="commentUserBadge"></label>
+            <div class="col-0 mx-1">
+                <div class="row">
+                    <label id="commentUserBadge" ></label>
+                </div>
+                <div class="row no-gutters">
+                    <a id="comment-upvote" href="#"><i class="ml-1 fa fa-caret-up fa-2x"></i></a>
+                </div>
+                <div >
+                    <div id="upvote-count" class="mr-1" style="text-align: center;"><p>999</p></div>
+                </div>
             </div>
             <div class="col-11">
                 <div class="row"> 
@@ -20,9 +28,7 @@
                 </div>
                 <div class="row my-1"> 
                     <div id="comment-options">
-                        <a id="comment-upvote" href="#"><i class="fa fa-thumbs-up"></i></a> -
-                        <a id="comment-edit" href="#">Edit</a> -
-                        <a id="comment-delete" href="#">Delete</a>
+                        
                     </div>
                 </div>
             </div>

@@ -10,5 +10,5 @@ router.get('/login', authHelpers.checkAlreadyAuthenticated, authController.login
 router.post('/login', authHelpers.checkAlreadyAuthenticated, authController.login_a_user_post);
 router.get('/logout', authHelpers.loginRequired, authController.logout_a_user);
 router.get('/getusername', authController.get_username);
-
+router.get('/getUser', authController.get_user);
 module.exports = router;

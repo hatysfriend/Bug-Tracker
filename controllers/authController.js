@@ -59,6 +59,10 @@ module.exports = {
     logout_a_user: (req, res, next) => {
         req.logout();
         res.redirect('/');
+    },
+
+    get_user: (req, res) => {
+        res.send(req.user._id);
     }
 };
 

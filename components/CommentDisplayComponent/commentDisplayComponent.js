@@ -1,3 +1,4 @@
+
 fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
     .then((response) => {
         response.text()
@@ -31,24 +32,32 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         let shadowRoot = this.attachShadow({ mode: 'open' });
                         shadowRoot.appendChild(html.getElementById('commentDisplayTemplate').content.cloneNode(true));
                         this.shadowDom = shadowRoot;
-                        this.setEventListeners();
                     }
 
                     setEventListeners() {
                         let commentDisplayDiv = this.shadowDom.querySelector('#commentDisplayDiv');
+                        let commentUpvote = this.shadowDom.querySelector('#comment-upvote');
+
+                        commentUpvote.addEventListener('click', (e)=> {
+                            //to be completed
+                            commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
+                        });
+                    }
+
+                    setCurrentUserEventListeners() {
+                        let commentDisplayDiv = this.shadowDom.querySelector('#commentDisplayDiv');
+                        let commentDisplay = this.shadowDom.querySelector('#commentsDisplay');
                         let commentDelete = this.shadowDom.querySelector('#comment-delete');
                         let commentEdit = this.shadowDom.querySelector('#comment-edit');
-                        let commentUpvote = this.shadowDom.querySelector('#comment-upvote');
-                        let commentDisplay = this.shadowDom.querySelector('#commentsDisplay');
 
                         commentDelete.addEventListener('click', (e)=> {
                             DeleteComment(this._bug._id, this._comment._id);
                             commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                         });
 
-                        // commentEdit.addEventListener('click', (e)=> {
-                        //     commentDisplay.focus();
-                        // });
+                        commentEdit.addEventListener('click', (e)=> {
+                            commentDisplay.focus();
+                        });
 
                         commentEdit.addEventListener('click', (e)=> {
                             let comment = this.shadowDom.querySelector('#commentsDisplay').value;
@@ -59,18 +68,42 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                             UpdateComment(this._bug._id, commentObj);
                             commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                         });
-
-                        commentUpvote.addEventListener('click', (e)=> {
-                            //to be completed
-                            commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
-                        });
                     }
 
-                    initializeCommentsList() {
+                    async initializeCommentsList() {
                         this.shadowRoot.querySelector('#commentUserBadge').innerHTML = `<h5><span class="badge badge-pill badge-light mr-2">${this._comment.user.username.charAt(0).toUpperCase()}</span></h5>`
                         this.shadowRoot.querySelector('#commentLabel').innerHTML =`<strong>${this._comment.user.username.charAt(0).toUpperCase()}${this._comment.user.username.slice(1)}</strong>`;
                         this.shadowRoot.querySelector('#commentsDisplay').textContent = this._comment.comment;
                         this.shadowRoot.querySelector('#commentDate').innerHTML = this.convertDisplayDate(this._comment.date).fontsize(1);
+                        
+                        let userCheck = await this.checkUser();
+                        if(userCheck) {
+                            let deleteElement = document.createElement("a");
+                            deleteElement.setAttribute('id', 'comment-delete');
+                            deleteElement.innerHTML = 'Delete';
+                            deleteElement.setAttribute('href', '#');
+                            let editElement = document.createElement("a");
+                            editElement.setAttribute('id', 'comment-edit');
+                            editElement.innerHTML = 'Edit';
+                            editElement.setAttribute('href', '#');
+                            
+                            this.shadowRoot.querySelector('#comment-options').appendChild(editElement);
+                            this.shadowRoot.querySelector('#comment-options').appendChild(document.createTextNode(' - '));
+                            this.shadowRoot.querySelector('#comment-options').appendChild(deleteElement);
+
+                            this.setCurrentUserEventListeners();
+                        }  
+                        
+                        this.setEventListeners();
+                    }
+
+                    async checkUser() {
+                        let currentUser = await GetCurrentUser();
+                        console.log(`Current User: ${JSON.stringify(currentUser)} and the Comment User: ${this.comment.user._id}`);
+                        if(currentUser === this.comment.user._id) {
+                            return true;
+                        }
+                        return false;
                     }
 
                     convertDisplayDate(commentDate) {
