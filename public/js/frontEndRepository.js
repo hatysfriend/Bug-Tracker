@@ -1,4 +1,4 @@
-async function AddTag(bugId, tag) {
+let AddTag = async (bugId, tag) => {
   return await fetch("/bugs/addTag", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -6,20 +6,26 @@ async function AddTag(bugId, tag) {
       id: bugId,
       tag: tag,
     }),
+  })
+  .catch( (err)=> {
+    console.log("Add Tag FETCH ERROR" + err);
   });
 }
 
-async function AddBug(bug) {
+let AddBug = async (bug) => {
   return await fetch('/bugs/addbug', {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       bug: bug
     })
+  })
+  .catch( (err)=> {
+    console.log("Add Bug FETCH ERROR" + err);
   });
 }
 
-async function UpdateBug(bugId, updateObject) {
+let UpdateBug = async (bugId, updateObject) => {
   console.log("The updated Bug" + JSON.stringify(updateObject));
   return await fetch("/bugs/update", {
     method: "POST",
@@ -28,41 +34,56 @@ async function UpdateBug(bugId, updateObject) {
       id: bugId,
       updateObject: updateObject,
     }),
+  })
+  .catch( (err)=> {
+    console.log("Update Bugs FETCH ERROR" + err);
   });
 }
 
-async function GetAllBugs() {
-  let bugs = await fetch("/bugs/getBugsJson");
+let GetAllBugs = async () => {
+  let bugs = await fetch("/bugs/getBugsJson")
+  .catch( (err)=> {
+    console.log("GET ALL BUGS FETCH ERROR" + err);
+  });
   return await bugs.json();
 }
 
-async function GetBugById(bugId) {
+let GetBugById = async (bugId) => {
   let result = await fetch("/bugs/getBugByIdJson", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       bugID: bugId,
     }),
+  })
+  .catch( (err)=> {
+    console.log("GET Bugs by Id FETCH ERROR" + err);
   });
   return await result.json();
 }
 
-async function GetAllComments(bugId) {
+let GetAllComments = async (bugId) => {
   return result = await fetch("/comments/getall", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       bugId: bugId
     })
+  })
+  .catch( (err)=> {
+    console.log("GET ALL Comments FETCH ERROR" + err);
   });
 }
 
-async function GetUserName() {
-  let result = await fetch("/auth/getusername");
+let GetUserName = async() => {
+  let result = await fetch("/auth/getusername")
+  .catch( (err)=> {
+    console.log("GET Username FETCH ERROR" + err);
+  });
   return await result.text();
 }
 
-async function CreateComment(bugId, comment) {
+let CreateComment = async(bugId, comment) => {
   let commentObj = {comment: comment};
   return await fetch("/comments/add", {
     method: "POST",
@@ -71,10 +92,13 @@ async function CreateComment(bugId, comment) {
       bugId: bugId,
       comment: commentObj
     })
+  })
+  .catch( (err)=> {
+    console.log("Create Comment FETCH ERROR" + err);
   });
 }
 
-async function UpdateComment(bugId, commentObj) {
+let UpdateComment = async (bugId, commentObj) => {
   return await fetch("/comments/update", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -82,11 +106,13 @@ async function UpdateComment(bugId, commentObj) {
       bugId: bugId,
       comment: commentObj,
     }),
+  })
+  .catch( (err)=> {
+    console.log("Update Comment FETCH ERROR" + err);
   });
 }
 
-  async function DeleteComment(bugId, commentId) {
-    console.log("DID WE GET HERE?");
+  let DeleteComment = async (bugId, commentId) => {
     return await fetch("/comments/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -94,10 +120,16 @@ async function UpdateComment(bugId, commentObj) {
         bugId: bugId,
         commentId: commentId
       })
+    })
+    .catch( (err)=> {
+      console.log("Delete Comment FETCH ERROR" + err);
     });
   }
 
-  async function GetCurrentUser() {
-    let result = await fetch("/auth/getUser");
+  let GetCurrentUser = async() => {
+    let result = await fetch("/auth/getUser")
+    .catch( (err)=> {
+      console.log("GET Current USER FETCH ERROR" + err);
+    });
     return await result.json();
   }

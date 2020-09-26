@@ -1,4 +1,3 @@
-
 fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
     .then((response) => {
         response.text()
@@ -39,7 +38,6 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         this.shadowRoot.querySelector('#commentLabel').innerHTML =`<strong>${this._comment.user.username.charAt(0).toUpperCase()}${this._comment.user.username.slice(1)}</strong>`;
                         this.shadowRoot.querySelector('#commentsDisplay').textContent = this._comment.comment;
                         this.shadowRoot.querySelector('#commentDate').innerHTML = this.convertDisplayDate(this._comment.date).fontsize(1);
-                        console.log(this.comment.likes);
                         this.shadowRoot.querySelector('#upvote-count').innerHTML = this.comment.likes.length;
 
                         let userCheck = await this.checkUser();
@@ -75,20 +73,31 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         let commentUpvote = this.shadowDom.querySelector('#comment-upvote');
 
                         commentUpvote.addEventListener('click', (e)=> {
-                            this.updateUpvote();
+                            this.updateUpvote()
+                                .then();
                         });
                     }
 
                     async updateUpvote() {
                         let commentDisplayDiv = this.shadowDom.querySelector('#commentDisplayDiv');
-                        let currentUser = await GetCurrentUser();
-                        console.log("THE CURRENT USER IS:" + JSON.stringify(currentUser));
-
+                        let currentUserId = await GetCurrentUser();
+                         
+                        let likes = this._comment.likes;
+                        if(likes.includes(currentUserId)) {
+                            let index = likes.findIndex((element) => {
+                                element === currentUserId;
+                            });      
+                            likes.splice(index, 1);                  
+                        }
+                        else {
+                            likes.push(currentUserId);
+                        }
+                        console.log("Likes Array!!!: "+likes);                        
                         let commentObj = {
                             _id: this.comment._id,
-                            likes: [{currentUser}]
+                            likes: likes
                         }
-                        UpdateComment(this._bug._id, commentObj);
+                        await UpdateComment(this._bug._id, commentObj);
                         commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                     }
 
@@ -108,11 +117,13 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         });
 
                         commentEdit.addEventListener('click', (e)=> {
+                            let comment = this.shadowDom.querySelector('#commentsDisplay').value;
                             let commentObj = {
                                 _id: this.comment._id,
                                 comment: comment
                             }
-                            UpdateComment(this._bug._id, commentObj);
+                            UpdateComment(this._bug._id, commentObj)
+                                .then();
                             commentDisplayDiv.dispatchEvent(new CustomEvent('update-modal', {detail: this.bug, bubbles: true, composed: true}));
                         });
                     }
@@ -135,10 +146,10 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                         if((timeDifferenceHours*60) < 1) {
                             return `a few seconds ago`;
                         }
-                        if(timeDifferenceHours < 1) {
+                        else if(timeDifferenceHours < 1) {
                             return `commented ${Math.round(timeDifferenceHours*60)} mins ago`;
                         }
-                        if(timeDifferenceHours < 6) {
+                        else if(timeDifferenceHours < 6) {
                             return `commented ${Math.round(timeDifferenceHours)} hours ago`;
                         }
                         return formatted_date;

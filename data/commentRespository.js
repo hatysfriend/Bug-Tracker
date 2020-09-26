@@ -37,7 +37,7 @@ module.exports = (() => {
         for(var prop in comment) {
             set['comments.$.'+ prop] = comment[prop];
         }
-
+        console.log(set);
         return await BugModel.findOneAndUpdate(
             {"_id": bugId, "comments._id": commentId}, 
             {$set: set},
@@ -46,6 +46,7 @@ module.exports = (() => {
                 console.log("DOC"+JSON.stringify(doc));
           }).populate('comments.user');
     }
+
 
     return {
         GetAllComments(bugId) {
@@ -61,4 +62,5 @@ module.exports = (() => {
             return _updateComment(bugId, commentId, update);
         },
     };
+    
 })(); 

@@ -2,9 +2,9 @@ const repository = require("../data/commentRespository");
 
 module.exports = {
 	update_comment: async (req, res) => {
-		console.log('---->THis wAS passed to Update_Comment: '+JSON.stringify(req.body))
 		await repository.UpdateComment(req.body.bugId, req.body.comment._id, req.body.comment);
 		res.status(200);
+		res.send('OK');
 	},
 
 	insert_comment: async (req, res) => {

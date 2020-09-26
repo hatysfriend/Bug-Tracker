@@ -1,4 +1,4 @@
-function showBugModal() {
+let showBugModal = () => {
     $('#addBugModal').modal('show');
 }
 
@@ -6,7 +6,7 @@ function logoAnimation() {
 
 }
 
-function flashDisplay() {
+let flashDisplay = () => {
   let flashComponent = document.getElementById('flashComponent');
   let flashMessage = flashComponent.getAttribute('flash');
   if(flashMessage.length > 0) {
@@ -15,7 +15,7 @@ function flashDisplay() {
   }
 }
 
-function CreateUserStatus() {
+let CreateUserStatus = () => {
   let userStatus = document.createElement('user-status');
   document.getElementById('userStatusContainer').appendChild(userStatus);
 }
@@ -78,7 +78,7 @@ let loadBugs = async () => {
   addButtonFixedNode.appendChild(getButtonTemplate("Fixed"));
 };
 
-function getButtonTemplate(status) {
+let getButtonTemplate = (status) => {
   let button = document.createElement("bug-new-button");
   let shadowButton = button.shadowRoot.firstElementChild;
   shadowButton.setAttribute("status", status);
@@ -115,7 +115,7 @@ let initialize = async () => {
 
   document.addEventListener('update-containers', async (e) => {
     console.log("We Recieved the bubble@ Containers!");
-    $('#addBugModal').modal('hide');         
+    // $('#addBugModal').modal('hide');         
     loadBugs();
   }, {capture: true});
 };

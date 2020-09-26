@@ -20,7 +20,6 @@ module.exports = {
   get_all_bugs_json: async (req, res) => {
     repository.GetAllBugs()
     .then((data) => {
-      console.log(data);
       res.send(data);
     })
     .catch((err) => {
