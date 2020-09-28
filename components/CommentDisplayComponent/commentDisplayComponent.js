@@ -34,9 +34,10 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                     }
 
                     async initializeCommentsList() {
+                        let comentsDisplayTextArea = this.shadowRoot.querySelector('#commentsDisplay');
                         this.shadowRoot.querySelector('#commentUserBadge').innerHTML = `<h5><span class="badge badge-pill badge-light mr-2">${this._comment.user.username.charAt(0).toUpperCase()}</span></h5>`
                         this.shadowRoot.querySelector('#commentLabel').innerHTML =`<strong>${this._comment.user.username.charAt(0).toUpperCase()}${this._comment.user.username.slice(1)}</strong>`;
-                        this.shadowRoot.querySelector('#commentsDisplay').textContent = this._comment.comment;
+                        comentsDisplayTextArea.textContent = this._comment.comment;
                         this.shadowRoot.querySelector('#commentDate').innerHTML = this.convertDisplayDate(this._comment.date).fontsize(1);
                         this.shadowRoot.querySelector('#upvote-count').innerHTML = this.comment.likes.length;
 
@@ -56,13 +57,15 @@ fetch('components/CommentDisplayComponent/commentDisplayComponent.html')
                             this.shadowRoot.querySelector('#comment-options').appendChild(deleteElement);
 
                             this.setCurrentUserEventListeners();
+                        }
+                        else {
+                            comentsDisplayTextArea.disabled = true;
                         }  
                         this.setEventListeners();
                     }
 
                     async checkUser() {
                         let currentUser = await GetCurrentUser();
-                        console.log(`Current User: ${JSON.stringify(currentUser)} and the Comment User: ${this.comment.user._id}`);
                         if(currentUser === this.comment.user._id) {
                             return true;
                         }
